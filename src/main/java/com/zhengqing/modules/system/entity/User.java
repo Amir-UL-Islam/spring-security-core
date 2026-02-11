@@ -1,0 +1,147 @@
+package com.zhengqing.modules.system.entity;
+
+import com.baomidou.mybatisplus.annotations.TableField;
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
+import com.baomidou.mybatisplus.enums.IdType;
+import com.zhengqing.modules.common.entity.BaseEntity;
+import com.zhengqing.modules.common.validator.Create;
+import com.zhengqing.modules.common.validator.FieldRepeatValidator;
+import com.zhengqing.modules.common.validator.Update;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.hibernate.validator.constraints.Length;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.io.Serializable;
+
+/**
+ * <p>  System Management-User Basic Information Table </p>
+ *
+ * @author: zhengqing
+ * @date: 2019-08-19
+ */
+@EqualsAndHashCode(callSuper = true)
+@Data
+@ApiModel(description = "System Management-User Basic Information Table")
+@TableName("t_sys_user")
+//To sort the annotation groups, you can judge the order through other methods.
+//@GroupSequence({FieldRepeatValidator.class,NotNull.class, Default.class})
+@FieldRepeatValidator(field = "username", message = "Duplicate account, please re-enter the account!")
+@Entity
+@Table(name = "t_sys_user")
+public class User extends BaseEntity<User> {
+
+    private static final long serialVersionUID = 1L;
+
+    /**
+     * Primary key ID groups: The identifier can only be verified to be non-empty when updated.
+     */
+    @ApiModelProperty(value = "Primary key ID")
+    @TableId(value = "id", type = IdType.AUTO)
+    @NotNull(message = "User id cannot be empty", groups = {Update.class})
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    /**
+     * account
+     */
+    @ApiModelProperty(value = "account")
+    @TableField("username")
+    @NotBlank(message = "Account cannot be empty", groups = {Create.class, Update.class})
+    @Length(max = 100, message = "账号不能超过100个字符")
+    @Pattern(regexp = "^[\\u4E00-\\u9FA5A-Za-z0-9\\*]*$", message = "Account limit: up to 100 characters, including text, letters and numbers")
+    private String username;
+    /**
+     * Login password
+     */
+    @ApiModelProperty(value = "Login password")
+    @TableField("password")
+    private String password;
+    /**
+     * Plain text password - used for QQ third-party authorized login
+     */
+    @ApiModelProperty(value = "clear text password")
+    @TableField("pwd")
+    @NotBlank(message = "Password cannot be empty")
+//	@FieldRepeatValidator(className = "com.zhengqing.modules.system.entity.User", field = "pwd", message = "Duplicate password！")
+//	@FieldRepeatValidator(className = "com.zhengqing.modules.system.entity.User", field = "pwd", message = "Duplicate password！",groups={FieldRepeatValidator.class})
+    private String pwd;
+    /**
+     * Nick name
+     */
+    @ApiModelProperty(value = "Nick name")
+    @TableField("nick_name")
+    @NotBlank(message = "Nick name")
+    private String nickName;
+    /**
+     * Gender 0: Male 1: Female
+     */
+    @ApiModelProperty(value = "Gender 0: Male 1: Female")
+    @TableField("sex")
+    private String sex;
+    /**
+     * phone number
+     */
+    @ApiModelProperty(value = "phone number")
+    @TableField("phone")
+    @NotBlank(message = "Mobile phone number cannot be empty")
+    @Pattern(regexp = "^[1][3,4,5,6,7,8,9][0-9]{9}$", message = "Mobile phone number format is wrong")
+    private String phone;
+    /**
+     * Mail
+     */
+    @ApiModelProperty(value = "Mail")
+    @TableField("email")
+    @NotBlank(message = "Contact email cannot be empty")
+    @Email(message = "Email format is wrong")
+    private String email;
+    /**
+     * avatar
+     */
+    @ApiModelProperty(value = "avatar")
+    @TableField("avatar")
+    private String avatar;
+    /**
+     * state
+     */
+    @ApiModelProperty(value = "state")
+    @TableField("flag")
+    private String flag;
+    /**
+     * salt value
+     */
+    @ApiModelProperty(value = "salt value")
+    @TableField("salt")
+    private String salt;
+    /**
+     * token
+     */
+    @ApiModelProperty(value = "token")
+    @TableField("token")
+    private String token;
+
+    @ApiModelProperty(value = "QQ third-party login Oppen_ID unique identifier")
+    @TableField("qq_oppen_id")
+    private String qqOppenId;
+
+//	@NotBlank(message = "ID number cannot be empty")
+//	@IdentityCardNumber(message = "The ID information is incorrect, please check before submitting.")
+//	private String clientCardNo;
+
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
+    }
+
+}
