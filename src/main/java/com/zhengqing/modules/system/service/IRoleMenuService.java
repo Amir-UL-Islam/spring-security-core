@@ -1,7 +1,6 @@
 package com.zhengqing.modules.system.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
 import com.zhengqing.modules.system.entity.RoleMenu;
 import com.zhengqing.modules.system.dto.input.RoleMenuQueryPara;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @author: zhengqing
  * @date: 2019-08-20
  */
-public interface IRoleMenuService extends IService<RoleMenu> {
+public interface IRoleMenuService {
 
     /**
      * 系统管理 - 角色-菜单关联表 列表分页
@@ -46,4 +45,8 @@ public interface IRoleMenuService extends IService<RoleMenu> {
      * @return: void
      */
     void saveRoleMenu(RoleMenuQueryPara filter);
+
+    void deleteById(Integer id);
+
+    RoleMenu selectById(Integer id);
 }

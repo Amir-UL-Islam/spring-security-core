@@ -8,55 +8,62 @@ import com.zhengqing.modules.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * <p>  系统管理-角色表  </p>
+ * <p>  System Administration-Role Table  </p>
  *
  * @author: zhengqing
  * @date: 2019-08-20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理-角色表 ")
+@ApiModel(description = "System Administration-Role Table")
 @TableName("t_sys_role")
+@Entity
+@Table(name = "t_sys_role")
 public class Role extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键ID
+     * PrimaryKeyID
      */
-	@ApiModelProperty(value = "主键ID")
-	@TableId(value="id", type= IdType.AUTO)
-	private Integer id;
+    @ApiModelProperty(value = "Primary key ID")
+    @TableId(value = "id", type = IdType.AUTO)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     /**
-     * 角色编码
+     * RoleCoding
      */
-	@ApiModelProperty(value = "角色编码")
-	@TableField("code")
-	@NotBlank(message = "角色编码不能为空")
-	@Length(max = 20, message = "角色编码不能超过20个字符")
-	private String code;
+    @ApiModelProperty(value = "Role Coding")
+    @TableField("code")
+    @NotBlank(message = "Role code cannot be empty")
+    @Length(max = 20, message = "The character code cannot exceed 20 characters")
+    private String code;
     /**
-     * 角色名称
+     * Character name
      */
-	@ApiModelProperty(value = "角色名称")
-	@TableField("name")
-	@NotBlank(message = "角色名称不能为空")
-	private String name;
+    @ApiModelProperty(value = "Character name")
+    @TableField("name")
+    @NotBlank(message = "Role name cannot be empty")
+    private String name;
     /**
-     * 角色描述
+     * Role description
      */
-	@ApiModelProperty(value = "角色描述")
-	@TableField("remarks")
-	private String remarks;
+    @ApiModelProperty(value = "Role description")
+    @TableField("remarks")
+    private String remarks;
 
-	@Override
-	protected Serializable pkVal() {
-		return this.id;
-	}
+    @Override
+    protected Serializable pkVal() {
+        return this.id;
+    }
 
 }

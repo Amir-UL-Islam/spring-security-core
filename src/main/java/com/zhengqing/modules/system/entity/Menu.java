@@ -9,35 +9,42 @@ import com.zhengqing.modules.common.validator.FieldRepeatValidator;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
 /**
- * <p>  系统管理-权限菜单表  </p>
+ * <p>  System Management-Permission Menu Table  </p>
  *
  * @author: zhengqing
  * @date: 2019-08-19
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理-菜单表 ")
+@ApiModel(description = "System Management-Menu Table")
 @TableName("t_sys_menu")
-@FieldRepeatValidator(field = "resources", message = "菜单编码重复！")
+@FieldRepeatValidator(field = "resources", message = "Menu coding is repeated!")
+@Entity
+@Table(name = "t_sys_menu")
 public class Menu extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
     /**
-     * 主键
+     * PrimaryKey
      */
-	@ApiModelProperty(value = "主键")
+	@ApiModelProperty(value = "Primary Key")
 	@TableId(value="id", type= IdType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
     /**
-     * 上级菜单ID
+     * ParentMenuID
      */
-	@ApiModelProperty(value = "上级菜单ID")
+	@ApiModelProperty(value = "Previous menu ID")
 	@TableField("parent_id")
 	private String parentId;
 	/**
@@ -47,49 +54,49 @@ public class Menu extends BaseEntity {
 	@TableField("url")
 	private String url;
     /**
-     * 菜单编码
+     * Menu encoding
      */
-	@ApiModelProperty(value = "菜单编码")
+	@ApiModelProperty(value = "Menu encoding")
 	@TableField("resources")
-	@NotBlank(message = "菜单编码不能为空")
-	@Length(max = 100, message = "菜单编码不能超过100个字符")
+	@NotBlank(message = "Menu code cannot be empty")
+	@Length(max = 100, message = "Menu encoding cannot exceed 100 characters")
 	private String resources;
     /**
-     * 菜单名称
+     * Menu name
      */
-	@ApiModelProperty(value = "菜单名称")
+	@ApiModelProperty(value = "Menu name")
 	@TableField("title")
-	@NotBlank(message = "菜单名称不能为空")
+	@NotBlank(message = "Menu name cannot be empty")
 	private String title;
     /**
-     * 菜单级别
+     * Menu Level
      */
-	@ApiModelProperty(value = "菜单级别")
+	@ApiModelProperty(value = "MenuLevel")
 	@TableField("level")
 	private Integer level;
     /**
-     * 排序
+     * Sort
      */
-	@ApiModelProperty(value = "排序")
+	@ApiModelProperty(value = "Sort")
 	@TableField("sort_no")
 	private Integer sortNo;
     /**
-     * 菜单图标
+     * MenuIcon
      */
-	@ApiModelProperty(value = "菜单图标")
+	@ApiModelProperty(value = "Menu Icon")
 	@TableField("icon")
 	private String icon;
     /**
-     * 类型 menu、button
+     * Type menu、button
      */
-	@ApiModelProperty(value = "类型 menu、button")
+	@ApiModelProperty(value = "Type menu、button")
 	@TableField("type")
-	@NotBlank(message = "类型不能为空")
+	@NotBlank(message = "Type cannot be empty")
 	private String type;
     /**
-     * 备注
+     * Remark
      */
-	@ApiModelProperty(value = "备注")
+	@ApiModelProperty(value = "Remark")
 	@TableField("remarks")
 	private String remarks;
 

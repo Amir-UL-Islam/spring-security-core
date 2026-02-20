@@ -36,7 +36,7 @@ public class SysUserRoleController extends BaseController {
     @PostMapping(value = "/listPage", produces = "application/json;charset=utf-8")
     @ApiOperation(value = "获取系统管理 - 用户角色关联表 列表分页", httpMethod = "POST", response = ApiResult.class)
     public ApiResult listPage(@RequestBody UserRoleQueryPara filter) {
-        Page<UserRole> page = new Page<>(filter.getPage(),filter.getLimit());
+        Page<UserRole> page = new Page<>(filter.getPage(), filter.getLimit());
         userRoleService.listPage(page, filter);
         return ApiResult.ok("获取系统管理 - 用户角色关联表 列表分页成功", page);
     }
@@ -45,7 +45,7 @@ public class SysUserRoleController extends BaseController {
     @ApiOperation(value = "获取系统管理 - 用户角色关联表 列表", httpMethod = "POST", response = ApiResult.class)
     public ApiResult list(@RequestBody UserRoleQueryPara filter) {
         List<UserRole> result = userRoleService.list(filter);
-        return ApiResult.ok("获取系统管理 - 用户角色关联表 列表成功",result);
+        return ApiResult.ok("获取系统管理 - 用户角色关联表 列表成功", result);
     }
 
     @PostMapping(value = "/saveOrUpdate", produces = "application/json;charset=utf-8")
@@ -72,7 +72,7 @@ public class SysUserRoleController extends BaseController {
     @PostMapping(value = "/saveUserRole", produces = "application/json;charset=utf-8")
     @ApiOperation(value = "保存角色相关联用户", httpMethod = "POST", response = ApiResult.class)
     public ApiResult saveUserRole(@RequestBody UserRoleQueryPara input) {
-        userRoleService.saveUserRole( input );
+        userRoleService.saveUserRole(input);
         return ApiResult.ok("保存角色相关联用户成功");
     }
 

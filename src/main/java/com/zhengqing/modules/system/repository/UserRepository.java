@@ -1,5 +1,6 @@
 package com.zhengqing.modules.system.repository;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.zhengqing.modules.common.validator.Update;
 import com.zhengqing.modules.system.dto.input.UserQueryPara;
 import com.zhengqing.modules.system.entity.User;
@@ -71,4 +72,7 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }
+
+    List<User> selectList(Wrapper<User> username);
+
 }

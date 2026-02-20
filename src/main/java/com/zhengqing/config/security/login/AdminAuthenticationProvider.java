@@ -3,11 +3,12 @@ package com.zhengqing.config.security.login;
 import com.zhengqing.config.Constants;
 import com.zhengqing.config.security.service.impl.UserDetailsServiceImpl;
 import com.zhengqing.config.security.dto.SecurityUser;
+import com.zhengqing.modules.system.repository.UserRepository;
 import com.zhengqing.utils.PasswordUtils;
 import com.zhengqing.modules.system.entity.User;
-import com.zhengqing.modules.system.mapper.UserMapper;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,19 +18,18 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 
 /**
- *  <p> Custom authentication processing </p>
+ * <p> Custom authentication processing </p>
  *
- * @description :
  * @author : zhengqing
+ * @description :
  * @date : 2019/10/12 14:49
  */
 @Component
+@RequiredArgsConstructor
 public class AdminAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
-    @Autowired
-    private UserMapper userMapper;
+    private final UserDetailsServiceImpl userDetailsService;
+    private final UserRepository userRepository;
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -63,9 +63,10 @@ public class AdminAuthenticationProvider implements AuthenticationProvider {
                 .compact();
 
 
-        User user = userMapper.selectById(userInfo.getCurrentUserInfo().getId());
+        User user = userRepository.selectById(userInfo.getCurrentUserInfo().getId());
         user.setToken(jwt);
-        userMapper.updateById(user);
+//        userMapper.updateById(user);
+        userRepository.save(user);
         userInfo.getCurrentUserInfo().setToken(jwt);
         return new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.getAuthorities());
     }

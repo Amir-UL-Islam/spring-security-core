@@ -1,20 +1,16 @@
-package com.zhengqing.modules.system.mapper;
+package com.zhengqing.modules.system.repository;
 
-import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.dto.input.MenuQueryPara;
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
-import org.apache.ibatis.annotations.Param;
+import com.zhengqing.modules.system.entity.Menu;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * <p> 系统管理-菜单表  Mapper 接口 </p>
- *
- * @author : zhengqing
- * @date : 2019-08-19
- */
-public interface MenuMapper extends BaseMapper<Menu> {
+public interface MenuRepository extends JpaRepository<Menu, Long> {
+
 
     /**
      * 列表分页
@@ -23,7 +19,7 @@ public interface MenuMapper extends BaseMapper<Menu> {
      * @param filter
      * @return
      */
-    List<Menu> selectMenus(Pagination page, @Param("filter") MenuQueryPara filter);
+    List<Menu> selectMenus(Pageable page, @Param("filter") MenuQueryPara filter);
 
     /**
      * 列表
@@ -49,4 +45,6 @@ public interface MenuMapper extends BaseMapper<Menu> {
      */
     List<Menu> selectMenuByRoleId(@Param("roleId") Integer roleId);
 
+    @Query(value = "select * from t_sys_menu", nativeQuery = true)
+    List<Menu> selectList();
 }

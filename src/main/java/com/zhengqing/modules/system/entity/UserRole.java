@@ -12,16 +12,22 @@ import com.zhengqing.modules.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
+import javax.persistence.*;
 
 /**
- * <p>  系统管理 - 用户角色关联表  </p>
+ * <p>  System Management - User Role Association Table  </p>
  *
  * @author: zhengqing
  * @date: 2019-08-20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理 - 用户角色关联表 ")
+@ApiModel(description = "System Management - User Role Association Table ")
 @TableName("t_sys_user_role")
+@Entity
+@Table(name = "t_sys_user_role")
 public class UserRole extends BaseEntity<UserRole> {
 
     private static final long serialVersionUID = 1L;
@@ -31,6 +37,8 @@ public class UserRole extends BaseEntity<UserRole> {
      */
 	@ApiModelProperty(value = "主键")
 	@TableId(value="id", type= IdType.AUTO)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
     /**
      * 用户ID

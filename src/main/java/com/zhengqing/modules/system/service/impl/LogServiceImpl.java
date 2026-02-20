@@ -2,16 +2,15 @@ package com.zhengqing.modules.system.service.impl;
 
 import com.zhengqing.modules.system.entity.SysLog;
 import com.zhengqing.modules.system.dto.input.LogQueryPara;
-import com.zhengqing.modules.system.mapper.LogMapper;
+import com.zhengqing.modules.system.repository.LogRepository;
 import com.zhengqing.modules.system.service.ILogService;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.plugins.Page;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * <p> 系统管理 - 日志表 服务实现类 </p>
@@ -21,16 +20,18 @@ import java.util.stream.Collectors;
  */
 @Service
 @Transactional
-public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements ILogService {
+@RequiredArgsConstructor
+public class LogServiceImpl implements ILogService {
 
-    @Autowired
-    LogMapper logMapper;
+    private final LogRepository logRepository;
 
     @Override
     public void listPage(Page<SysLog> page, LogQueryPara para) {
-        List<SysLog> result = logMapper.selectLogs(page, para);
-        result.forEach( e->{
-            if (e.getUserId()==0){
+        int pageIndex = Math.max(page.getCurrent() - 1, 0);
+        int pageSize = page.getSize();
+        List<SysLog> result = logRepository.selectLogs(PageRequest.of(pageIndex, pageSize), para);
+        result.forEach(e -> {
+            if (e.getUserId() == 0) {
                 e.setUsername("非法人员");
             }
         });
@@ -39,15 +40,17 @@ public class LogServiceImpl extends ServiceImpl<LogMapper, SysLog> implements IL
 
     @Override
     public List<SysLog> list(LogQueryPara para) {
-        return logMapper.selectLogs(para);
+        return logRepository.selectLogs(para);
     }
 
     @Override
     public Integer save(SysLog para) {
-        if (para.getId()!=null) {
-            logMapper.updateById(para);
+        if (para.getId() != null) {
+//            logMapper.updateById(para);
+            logRepository.save(para);
         } else {
-            logMapper.insert(para);
+//            logMapper.insert(para);
+            logRepository.save(para);
         }
         return para.getId();
     }

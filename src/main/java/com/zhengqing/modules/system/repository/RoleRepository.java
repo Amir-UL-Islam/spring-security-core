@@ -1,32 +1,27 @@
-package com.zhengqing.modules.system.mapper;
+package com.zhengqing.modules.system.repository;
 
-import com.baomidou.mybatisplus.mapper.BaseMapper;
-import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.zhengqing.modules.system.dto.input.RoleQueryPara;
 import com.zhengqing.modules.system.entity.Role;
-import org.apache.ibatis.annotations.Param;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-/**
- * <p> 系统管理-角色表  Mapper 接口 </p>
- *
- * @author : zhengqing
- * @date : 2019-08-20
- */
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleRepository extends JpaRepository<Role, Long> {
+
 
     /**
-     * 列表分页
+     * List paging
      *
      * @param page
      * @param filter
      * @return
      */
-    List<Role> selectRoles(Pagination page, @Param("filter") RoleQueryPara filter);
+    List<Role> selectRoles(Pageable page, @Param("filter") RoleQueryPara filter);
 
     /**
-     * 列表
+     * List
      *
      * @param filter
      * @return
@@ -34,7 +29,7 @@ public interface RoleMapper extends BaseMapper<Role> {
     List<Role> selectRoles(@Param("filter") RoleQueryPara filter);
 
     /**
-     * 通过用户ID查询角色集合
+     * Query role collection by user ID
      *
      * @param userId:
      * @return: java.util.List<Role>
@@ -42,11 +37,12 @@ public interface RoleMapper extends BaseMapper<Role> {
     List<Role> selectRoleByUserId(@Param("userId") Integer userId);
 
     /**
-     * 通过菜单ID查询角色集合
+     * Query role collection by menu ID
      *
      * @param menuId:
      * @return: java.util.List<Role>
      */
     List<Role> selectRoleByMenuId(@Param("menuId") Integer menuId);
 
+    Role selectById(Integer roleId);
 }

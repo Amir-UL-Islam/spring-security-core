@@ -1,7 +1,6 @@
 package com.zhengqing.modules.system.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
 import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.dto.input.RoleQueryPara;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @author: zhengqing
  * @date: 2019-08-20
  */
-public interface IRoleService extends IService<Role> {
+public interface IRoleService {
 
     /**
      * 系统管理-角色表 列表分页
@@ -38,4 +37,9 @@ public interface IRoleService extends IService<Role> {
      * @return
      */
     List<Role> list(RoleQueryPara filter);
+
+    void deleteById(Integer id);
+
+    Role selectById(Integer id);
+
 }

@@ -3,20 +3,18 @@ package com.zhengqing.modules.common.interceptor;
 import com.zhengqing.config.Constants;
 import com.zhengqing.modules.common.dto.output.ApiResult;
 import com.zhengqing.modules.system.entity.SysLog;
-import com.zhengqing.modules.system.entity.User;
-import com.zhengqing.modules.system.mapper.UserMapper;
+import com.zhengqing.modules.system.repository.UserRepository;
 import com.zhengqing.utils.DateTimeUtils;
 import com.zhengqing.utils.IpUtils;
 import io.swagger.annotations.ApiOperation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -35,10 +33,10 @@ import java.util.Date;
 @Aspect
 @Configuration
 @Slf4j
+@RequiredArgsConstructor
 public class SystemLogAspect {
 
-    @Autowired
-    UserMapper userMapper;
+    private final UserRepository userRepository;
 
     @Pointcut("execution(* com.zhengqing.modules.*.api.*Controller.*(..)))")
     public void systemLog() {
@@ -83,8 +81,8 @@ public class SystemLogAspect {
             sysLog.setUserId(0);
 //            sysLog.setName(result.getMessage());
         } else {
-            if (userMapper.getUserInfoByToken(token) != null) {
-                sysLog.setUserId(userMapper.getUserInfoByToken(token).getId());
+            if (userRepository.getUserInfoByToken(token) != null) {
+                sysLog.setUserId(userRepository.getUserInfoByToken(token).getId());
             }
         }
         sysLog.setStatus(result.getCode());

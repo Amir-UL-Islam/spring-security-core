@@ -5,10 +5,10 @@ import com.zhengqing.config.security.dto.SecurityUser;
 import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.entity.User;
 import com.zhengqing.modules.system.entity.UserRole;
-import com.zhengqing.modules.system.mapper.RoleMapper;
-import com.zhengqing.modules.system.mapper.UserMapper;
-import com.zhengqing.modules.system.mapper.UserRoleMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zhengqing.modules.system.repository.RoleRepository;
+import com.zhengqing.modules.system.repository.UserRepository;
+import com.zhengqing.modules.system.repository.UserRoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -26,14 +26,13 @@ import java.util.List;
  * @date : 2019/10/14 17:46
  */
 @Service("userDetailsService")
+@RequiredArgsConstructor
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-    @Autowired
-    private UserMapper userMapper;
-    @Autowired
-    private RoleMapper roleMapper;
-    @Autowired
-    private UserRoleMapper userRoleMapper;
+
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
 
     /***
      * 根据账号获取用户信息
@@ -43,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 从数据库中取出用户信息
-        List<User> userList = userMapper.selectList(new EntityWrapper<User>().eq("username", username));
+        List<User> userList = userRepository.selectList(new EntityWrapper<User>().eq("username", username));
         User user;
         // 判断用户是否存在
         if (!CollectionUtils.isEmpty(userList)) {
@@ -63,7 +62,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     public SecurityUser getUserByToken(String token) {
         User user = null;
-        List<User> loginList = userMapper.selectList(new EntityWrapper<User>().eq("token", token));
+        List<User> loginList = userRepository.selectList(new EntityWrapper<User>().eq("token", token));
         if (!CollectionUtils.isEmpty(loginList)) {
             user = loginList.get(0);
         }
@@ -77,10 +76,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      * @return
      */
     private List<Role> getUserRoles(Integer userId) {
-        List<UserRole> userRoles = userRoleMapper.selectList(new EntityWrapper<UserRole>().eq("user_id", userId));
+        List<UserRole> userRoles = userRoleRepository.selectList(new EntityWrapper<UserRole>().eq("user_id", userId));
         List<Role> roleList = new LinkedList<>();
         for (UserRole userRole : userRoles) {
-            Role role = roleMapper.selectById(userRole.getRoleId());
+            Role role = roleRepository.selectById(userRole.getRoleId());
             roleList.add(role);
         }
         return roleList;

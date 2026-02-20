@@ -1,51 +1,72 @@
 package com.zhengqing.modules.system.service.impl;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhengqing.modules.system.dto.input.MenuQueryPara;
 import com.zhengqing.modules.system.entity.Menu;
-import com.zhengqing.modules.system.mapper.MenuMapper;
+import com.zhengqing.modules.system.repository.MenuRepository;
 import com.zhengqing.modules.system.service.IMenuService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
- * <p> 系统管理-菜单表  服务实现类 </p>
+ * <p> System Management-Menu Table Service Implementation Class </p>
  *
  * @author: zhengqing
  * @date: 2019-08-19
  */
 @Service
 @Transactional
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
+@RequiredArgsConstructor
+public class MenuServiceImpl implements IMenuService {
 
-    @Autowired
-    MenuMapper menuMapper;
+    private final MenuRepository menuRepository;
 
     @Override
-    public List <Menu> listTreeMenu() {
-        return menuMapper.selectList(null);
+    public List<Menu> listTreeMenu() {
+        return menuRepository.findAll();
     }
 
     @Override
     public void listPage(Page<Menu> page, MenuQueryPara filter) {
-        page.setRecords(menuMapper.selectMenus(page, filter));
+        int pageIndex = Math.max(page.getCurrent() - 1, 0);
+        int pageSize = page.getSize();
+        page.setRecords(menuRepository.selectMenus(PageRequest.of(pageIndex, pageSize), filter));
     }
 
     @Override
     public List<Menu> list(MenuQueryPara filter) {
-        return menuMapper.selectMenus(filter);
+        return menuRepository.selectMenus(filter);
+    }
+
+    @Override
+    public List<Menu> selectList(Wrapper<Menu> parentId) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+
+    }
+
+    @Override
+    public Menu selectById(Integer id) {
+        return null;
     }
 
     @Override
     public Integer save(Menu para) {
-        if (para.getId()!=null) {
-            menuMapper.updateById(para);
+        if (para.getId() != null) {
+//            menuMapper.updateById(para);
+            menuRepository.save(para);
         } else {
-            menuMapper.insert(para);
+//            menuMapper.insert(para);
+            menuRepository.save(para);
         }
         return para.getId();
     }

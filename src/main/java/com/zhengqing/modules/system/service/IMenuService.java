@@ -1,5 +1,6 @@
 package com.zhengqing.modules.system.service;
 
+import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import com.zhengqing.modules.system.entity.Menu;
@@ -8,15 +9,15 @@ import com.zhengqing.modules.system.dto.input.MenuQueryPara;
 import java.util.List;
 
 /**
- * <p>  系统管理-菜单表  服务类 </p>
+ * <p>  System Management-Menu Table Service Category </p>
  *
  * @author: zhengqing
  * @date: 2019-08-19
  */
-public interface IMenuService extends IService<Menu> {
+public interface IMenuService {
 
     /**
-     * 菜单树
+     * MenuTree
      *
      * @param :
      * @return: java.util.List<com.zhengqing.modules.system.entity.Menu>
@@ -24,7 +25,7 @@ public interface IMenuService extends IService<Menu> {
     List<Menu> listTreeMenu();
 
     /**
-     * 系统管理-菜单表 列表分页
+     * System Management-Menu Table List Paging
      *
      * @param page
      * @param filter
@@ -33,17 +34,23 @@ public interface IMenuService extends IService<Menu> {
     void listPage(Page<Menu> page, MenuQueryPara filter);
 
     /**
-     * 保存系统管理-菜单表
+     * Save system management-menu table
      *
      * @param input
      */
     Integer save(Menu input);
 
     /**
-     * 系统管理-菜单表 列表
+     * System Management-Menu Table List
      *
      * @param filter
      * @return
      */
     List<Menu> list(MenuQueryPara filter);
+
+    List<Menu> selectList(Wrapper<Menu> parentId);
+
+    void deleteById(Integer id);
+
+    Menu selectById(Integer id);
 }

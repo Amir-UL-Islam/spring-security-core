@@ -6,10 +6,10 @@ import com.zhengqing.config.MyProperties;
 import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.entity.RoleMenu;
-import com.zhengqing.modules.system.mapper.MenuMapper;
-import com.zhengqing.modules.system.mapper.RoleMapper;
-import com.zhengqing.modules.system.mapper.RoleMenuMapper;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zhengqing.modules.system.repository.MenuRepository;
+import com.zhengqing.modules.system.repository.RoleMenuRepository;
+import com.zhengqing.modules.system.repository.RoleRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
@@ -22,56 +22,53 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * <p> 获取访问该url所需要的用户角色权限信息 </p>
+ * <p> Get the user role permission information required to access the url</p>
  *
  * @author : zhengqing
- * @description : 执行完之后到 `UrlAccessDecisionManager` 中认证权限
+ * @description : After execution, go to `UrlAccessDecisionManager` to authenticate permissions
  * @date : 2019/10/15 14:36
  */
 @Component
+@RequiredArgsConstructor
 public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-    @Autowired
-    MenuMapper menuMapper;
-    @Autowired
-    RoleMenuMapper roleMenuMapper;
-    @Autowired
-    RoleMapper roleMapper;
-    @Autowired
-    MyProperties myProperties;
+    private final MenuRepository menuRepository;
+    private final RoleRepository roleRepository;
+    private final RoleMenuRepository roleMenuRepository;
+    private final MyProperties myProperties;
 
     /***
-     * 返回该url所需要的用户权限信息
+     * Returns the user permission information required for this URL
      *
-     * @param object: 储存请求url信息
-     * @return: null：标识不需要任何权限都可以访问
+     * @param object: Store request url information
+     * @return: null：Identification does not require any permissions to access
      */
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
-        // 获取当前请求url
+        //Get the current request url
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
-        // TODO 忽略url请放在此处进行过滤放行
+        // TODO If you ignore the URL, please put it here for filtering and release.
         for (String ignoreUrl : myProperties.getAuth().getIgnoreUrls()) {
-            if (ignoreUrl.equals(requestUrl)){
+            if (ignoreUrl.equals(requestUrl)) {
                 return null;
             }
         }
 
-        if (requestUrl.contains("/login")){
+        if (requestUrl.contains("/login")) {
             return null;
         }
 
-        // 数据库中所有url
-        List<Menu> permissionList = menuMapper.selectList(null);
+        // All urls in the database
+        List<Menu> permissionList = menuRepository.selectList();
         for (Menu permission : permissionList) {
             // 获取该url所对应的权限
             if (("/api" + permission.getUrl()).equals(requestUrl)) {
-                List<RoleMenu> permissions = roleMenuMapper.selectList(new EntityWrapper<RoleMenu>().eq("menu_id", permission.getId()));
+                List<RoleMenu> permissions = roleMenuRepository.selectList(new EntityWrapper<RoleMenu>().eq("menu_id", permission.getId()));
                 List<String> roles = new LinkedList<>();
-                if (!CollectionUtils.isEmpty(permissions)){
-                    permissions.forEach( e -> {
+                if (!CollectionUtils.isEmpty(permissions)) {
+                    permissions.forEach(e -> {
                         Integer roleId = e.getRoleId();
-                        Role role = roleMapper.selectById(roleId);
+                        Role role = roleRepository.selectById(roleId);
                         roles.add(role.getCode());
                     });
                 }

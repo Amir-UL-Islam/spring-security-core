@@ -2,8 +2,9 @@ package com.zhengqing;
 
 import com.zhengqing.config.Constants;
 import com.zhengqing.modules.system.entity.User;
-import com.zhengqing.modules.system.mapper.UserMapper;
+import com.zhengqing.modules.system.repository.UserRepository;
 import com.zhengqing.utils.PasswordUtils;
+import lombok.RequiredArgsConstructor;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,10 +15,10 @@ import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@RequiredArgsConstructor
 public class ApplicationTests {
 
-    @Autowired
-    UserMapper userMapper;
+    private final UserRepository userRepository;
 
     @Test
     public void contextLoads() {
@@ -30,12 +31,13 @@ public class ApplicationTests {
      * @return: void
      */
     @Test
-    public void test() throws Exception{
-        List<User> users = userMapper.selectList(null);
-        users.forEach( e -> {
+    public void test() throws Exception {
+        List<User> users = userRepository.selectList(null);
+        users.forEach(e -> {
             e.setPassword(PasswordUtils.encodePassword(e.getPassword(), Constants.SALT));
             e.setSalt(Constants.SALT);
-            userMapper.updateById(e);
+//            userMapper.updateById(e);
+            userRepository.save(e);
         });
     }
 

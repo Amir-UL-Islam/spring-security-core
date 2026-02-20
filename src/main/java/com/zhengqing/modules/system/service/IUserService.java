@@ -1,7 +1,6 @@
 package com.zhengqing.modules.system.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
 import com.zhengqing.modules.system.dto.input.UserQueryPara;
 import com.zhengqing.modules.system.dto.model.UserInfoVO;
 import com.zhengqing.modules.system.entity.User;
@@ -16,7 +15,7 @@ import java.util.List;
  * @author: zhengqing
  * @date: 2019-08-19
  */
-public interface IUserService extends IService<User> {
+public interface IUserService {
 
     /**
      * 系统管理-用户基础信息表列表分页
@@ -109,5 +108,9 @@ public interface IUserService extends IService<User> {
     List<User> selectUserByRoleId(@Param("roleId") Integer roleId);
 
 
+    List<User> selectList(Object o);
 
+    void deleteById(Integer id);
+
+    User selectById(Integer id);
 }

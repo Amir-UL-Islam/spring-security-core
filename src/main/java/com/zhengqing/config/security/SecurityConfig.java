@@ -7,7 +7,7 @@ import com.zhengqing.config.security.login.AdminAuthenticationEntryPoint;
 import com.zhengqing.config.security.url.UrlAccessDecisionManager;
 import com.zhengqing.config.security.url.UrlAccessDeniedHandler;
 import com.zhengqing.config.security.url.UrlFilterInvocationSecurityMetadataSource;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
@@ -32,10 +32,10 @@ import org.springframework.security.web.authentication.www.BasicAuthenticationFi
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Autowired
-    MyProperties myProperties;
+    private final MyProperties myProperties;
 
     /**
      * 访问鉴权 - 认证token、签名...
@@ -64,15 +64,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      * 自定义访问无权限接口时403响应内容
      */
     private final UrlAccessDeniedHandler urlAccessDeniedHandler;
-
-    public SecurityConfig(MyAuthenticationFilter myAuthenticationFilter, AdminAuthenticationEntryPoint adminAuthenticationEntryPoint, AdminAuthenticationProcessingFilter adminAuthenticationProcessingFilter, UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource, UrlAccessDeniedHandler urlAccessDeniedHandler, UrlAccessDecisionManager urlAccessDecisionManager) {
-        this.myAuthenticationFilter = myAuthenticationFilter;
-        this.adminAuthenticationEntryPoint = adminAuthenticationEntryPoint;
-        this.adminAuthenticationProcessingFilter = adminAuthenticationProcessingFilter;
-        this.urlFilterInvocationSecurityMetadataSource = urlFilterInvocationSecurityMetadataSource;
-        this.urlAccessDeniedHandler = urlAccessDeniedHandler;
-        this.urlAccessDecisionManager = urlAccessDecisionManager;
-    }
 
 
     /**

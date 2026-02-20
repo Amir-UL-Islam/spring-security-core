@@ -1,7 +1,6 @@
 package com.zhengqing.modules.system.service;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
 import com.zhengqing.modules.system.dto.input.UserRoleQueryPara;
 import com.zhengqing.modules.system.entity.UserRole;
 
@@ -13,7 +12,7 @@ import java.util.List;
  * @author: zhengqing
  * @date: 2019-08-20
  */
-public interface IUserRoleService extends IService<UserRole> {
+public interface IUserRoleService {
 
     /**
      * 系统管理 - 用户角色关联表 列表分页
@@ -47,4 +46,7 @@ public interface IUserRoleService extends IService<UserRole> {
      */
     void saveUserRole(UserRoleQueryPara filter);
 
+    void deleteById(Integer id);
+
+    UserRole selectById(Integer id);
 }

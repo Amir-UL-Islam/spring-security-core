@@ -2,7 +2,6 @@ package com.zhengqing.modules.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import com.zhengqing.config.Constants;
 import com.zhengqing.modules.common.exception.MyException;
 import com.zhengqing.modules.system.dto.input.UserQueryPara;
@@ -12,10 +11,9 @@ import com.zhengqing.modules.system.dto.model.UserInfoVO;
 import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.entity.User;
-import com.zhengqing.modules.system.mapper.RoleMenuMapper;
-import com.zhengqing.modules.system.mapper.UserMapper;
-import com.zhengqing.modules.system.mapper.UserRoleMapper;
+import com.zhengqing.modules.system.repository.RoleMenuRepository;
 import com.zhengqing.modules.system.repository.UserRepository;
+import com.zhengqing.modules.system.repository.UserRoleRepository;
 import com.zhengqing.modules.system.service.IUserService;
 import com.zhengqing.utils.PasswordUtils;
 import com.zhengqing.utils.TreeBuilder;
@@ -38,11 +36,11 @@ import java.util.*;
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
-    private final UserRoleMapper userRoleMapper;
-    private final RoleMenuMapper roleMenuMapper;
+    private final RoleMenuRepository roleMenuRepository;
+    private final UserRoleRepository userRoleRepository;
 
     @Override
     public void listPage(Page<User> page, UserQueryPara filter) {
@@ -67,12 +65,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         Set<ButtonVO> buttonVOS = new HashSet();
 
         //Query the role of a user
-        List<Role> roleList = userRoleMapper.selectRoleByUserId(user.getId());
+        List<Role> roleList = userRoleRepository.selectRoleByUserId(user.getId());
         if (roleList != null && !roleList.isEmpty()) {
             roles.add(roleList.get(0).getCode());
 
             //Query the menu of a character
-            List<Menu> menuList = roleMenuMapper.selectMenusByRoleId(roleList.get(0).getId());
+            List<Menu> menuList = roleMenuRepository.selectMenusByRoleId(roleList.get(0).getId());
             if (menuList != null && !menuList.isEmpty()) {
                 menuList.stream().filter(Objects::nonNull).forEach(menu -> {
                     if ("button".equals(menu.getType().toLowerCase())) {
@@ -124,6 +122,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public List<User> selectUserByRoleId(Integer roleId) {
         return userRepository.selectUserByRoleId(roleId);
+    }
+
+    @Override
+    public List<User> selectList(Object o) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+
+    }
+
+    @Override
+    public User selectById(Integer id) {
+        return null;
     }
 
     @Override

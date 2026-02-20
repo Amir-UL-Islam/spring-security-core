@@ -13,7 +13,7 @@ import java.util.List;
  * @author: zhengqing
  * @date: 2019-09-18 10:51:57
  */
-public interface ILogService extends IService<SysLog> {
+public interface ILogService {
 
     /**
      * 系统管理 - 日志表列表分页
