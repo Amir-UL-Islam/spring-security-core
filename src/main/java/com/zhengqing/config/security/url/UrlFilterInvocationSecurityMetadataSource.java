@@ -57,7 +57,7 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
             return null;
         }
 
-        // All urls in the database
+        // All URLs in the database
         List<Menu> permissionList = menuRepository.selectList();
         for (Menu permission : permissionList) {
             // Obtain the permissions corresponding to the URL
@@ -71,11 +71,12 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
                         roles.add(role.getCode());
                     });
                 }
-                // 保存该url对应角色权限信息
+                // Save the permission information for the role corresponding to the URL
                 return SecurityConfig.createList(roles.toArray(new String[roles.size()]));
             }
         }
-        // 如果数据中没有找到相应url资源则为非法访问，要求用户登录再进行操作
+        // If no corresponding URL resource is found in the data,
+        // it is illegal access, and the user is required to log in before operating
         return SecurityConfig.createList(Constants.ROLE_LOGIN);
     }
 

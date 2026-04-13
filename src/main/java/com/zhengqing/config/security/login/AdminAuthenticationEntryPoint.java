@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * <p> Authentication authority entry - accessing all interfaces without logging in will intercept this </p>
  *
  * @author : zhengqing
- * @description : 前后端分离情况下返回json格式数据
+ * @description : Return JSON format data when the front and back ends are separated
  * @date : 2019/10/11 17:32
  */
 @Slf4j
@@ -23,11 +23,11 @@ public class AdminAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException e) {
-        // 未登录 或 token过期
+        // Not logged in or token expired
         if (e!=null){
             ResponseUtils.out(response, ApiResult.expired(e.getMessage()));
         } else {
-            ResponseUtils.out(response, ApiResult.expired("jwtToken过期!"));
+            ResponseUtils.out(response, ApiResult.expired("jwtToken expires!"));
         }
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 /**
- * <p> 安全认证用户详情 </p>
+ * <p> Security authentication user details </p>
  *
  * @author : zhengqing
  * @description :
@@ -25,15 +25,15 @@ import java.util.StringJoiner;
 @Slf4j
 public class SecurityUser implements UserDetails {
     /**
-     * 当前登录用户
+     * The current logged-in user
      */
     private transient User currentUserInfo;
     /**
-     * 角色
+     * roleList
      */
     private transient List<Role> roleList;
     /**
-     * 当前用户所拥有角色代码
+     * The role code that the current user has
      */
     private transient String roleCodes;
 
@@ -58,7 +58,7 @@ public class SecurityUser implements UserDetails {
     }
 
     /**
-     * 获取当前用户所具有的角色
+     * Get the role that the current user has
      *
      * @return
      */

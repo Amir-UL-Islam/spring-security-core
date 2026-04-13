@@ -65,7 +65,6 @@ public class AdminAuthenticationProvider implements AuthenticationProvider {
 
         User user = userRepository.selectById(userInfo.getCurrentUserInfo().getId());
         user.setToken(jwt);
-//        userMapper.updateById(user);
         userRepository.save(user);
         userInfo.getCurrentUserInfo().setToken(jwt);
         return new UsernamePasswordAuthenticationToken(userInfo, password, userInfo.getAuthorities());

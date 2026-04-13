@@ -37,7 +37,6 @@ import java.io.UnsupportedEncodingException;
 public class MyAuthenticationFilter extends OncePerRequestFilter {
 
     private final AdminAuthenticationEntryPoint authenticationEntryPoint;
-
     private final UserDetailsServiceImpl userDetailsService;
 
     protected MyAuthenticationFilter(AdminAuthenticationEntryPoint authenticationEntryPoint, UserDetailsServiceImpl userDetailsService) {
@@ -58,7 +57,7 @@ public class MyAuthenticationFilter extends OncePerRequestFilter {
         StopWatch stopWatch = new StopWatch();
         try {
             stopWatch.start();
-            // 记录请求的消息体
+            // Record the message body of the request
             logRequestBody(wrappedRequest);
 
 //            SecurityContext context = SecurityContextHolder.getContext();
@@ -68,31 +67,39 @@ public class MyAuthenticationFilter extends OncePerRequestFilter {
 //            }
 
 
-            // 前后端分离情况下，前端登录后将token储存在cookie中，每次访问接口时通过token去拿用户权限
+            // In the case of separation between the front and backend,
+            // the token is stored in a cookie after logging in to the frontend,
+            // and user permissions are obtained through the token every time the interface is accessed
             String jwtToken = wrappedRequest.getHeader(Constants.REQUEST_HEADER);
             log.debug("Check the token in the background:{}", jwtToken);
             if (StringUtils.isNotBlank(jwtToken)) {
-                // JWT相关start ===========================================
-                // 获取jwt中的信息
-                Claims claims = Jwts.parser().setSigningKey(Constants.SALT).parseClaimsJws(jwtToken.replace("Bearer", "")).getBody();
-                // 获取当前登录用户名
+                // JWT related start ===========================================
+                //Get the information in the JWT
+                Claims claims = Jwts.parser()
+                        .setSigningKey(Constants.SALT)
+                        .parseClaimsJws(jwtToken.replace("Bearer", ""))
+                        .getBody();
+
+                // Get the current login username
                 System.out.println("Get the current login username: " + claims.getSubject());
                 // TODO If you need to use the JWT feature to deal with it here~
-                // JWT相关end ===========================================
+                // JWT related end===========================================
 
-                // 检查token
+                //Check the token
                 SecurityUser securityUser = userDetailsService.getUserByToken(jwtToken);
                 if (securityUser == null || securityUser.getCurrentUserInfo() == null) {
                     throw new BadCredentialsException("The TOKEN has expired, please log in again！");
                 }
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
-                // 全局注入角色权限信息和登录用户基本信息
+
+                // Globally inject role permission information and basic information of logged-in users
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } catch (ExpiredJwtException e) {
-            // jwt令牌过期
+            // The JWT token has expired
             SecurityContextHolder.clearContext();
+
             this.authenticationEntryPoint.commence(wrappedRequest, response, null);
         } catch (AuthenticationException e) {
             SecurityContextHolder.clearContext();
@@ -100,7 +107,8 @@ public class MyAuthenticationFilter extends OncePerRequestFilter {
         } finally {
             stopWatch.stop();
             long usedTimes = stopWatch.getTotalTimeMillis();
-            // 记录响应的消息体
+
+            // The message body that records the response
             logResponseBody(wrappedRequest, wrappedResponse, usedTimes);
         }
 

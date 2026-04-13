@@ -31,15 +31,16 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
      */
     @Override
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> collection) throws AccessDeniedException, AuthenticationException {
-        // 遍历角色
+        // Traverse the role
         for (ConfigAttribute ca : collection) {
+
             //① Permissions required by the current url request
             String needRole = ca.getAttribute();
             if (Constants.ROLE_LOGIN.equals(needRole)) {
                 if (authentication instanceof AnonymousAuthenticationToken) {
-                    throw new BadCredentialsException("未登录!");
+                    throw new BadCredentialsException("Not logged in!");
                 } else {
-                    throw new AccessDeniedException("未授权该url！");
+                    throw new AccessDeniedException("The URL is not authorized!");
                 }
             }
 

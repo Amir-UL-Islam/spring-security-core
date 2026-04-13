@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * <p> 自定义userDetailsService - 认证用户详情 </p>
+ * <p> Custom userDetailsService - Authenticate user details </p>
  *
  * @author : zhengqing
  * @description :
@@ -47,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (!CollectionUtils.isEmpty(userList)) {
             user = userList.get(0);
         } else {
-            throw new UsernameNotFoundException("用户名不存在！");
+            throw new UsernameNotFoundException("The username does not exist!");
         }
         // Return UserDetails implementation class
         return new SecurityUser(user, getUserRoles(user.getId()));

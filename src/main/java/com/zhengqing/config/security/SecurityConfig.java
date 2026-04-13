@@ -23,11 +23,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
- *  <p> Security Core configuration class </p>
+ * <p> Security Core configuration class </p>
  *
- * @author：  zhengqing <br/>
- * @date：  2019/9/30$ 10:58$ <br/>
- * @version：  <br/>
+ * @author：zhengqing <br/>
+ * @date： 2019/9/30$ 10:58$ <br/>
+ * @version： <br/>
  */
 @Configuration
 @EnableWebSecurity
@@ -50,7 +50,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private final AdminAuthenticationProcessingFilter adminAuthenticationProcessingFilter;
 
-    // The above is related to login authentication, and the following is related to url permissions. - ========================================================================================
+    // The above is related to login authentication,
+    // and the following is related to url permissions. - ========================================================================================
 
     /**
      * Get the role information required to access the url
