@@ -5,15 +5,15 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 /**
- *  <p> 基类查询参数 </p>
+ *  <p> Base class query parameters </p>
  *
  * @description:
  * @author: zhengqing
  * @date: 2019/9/13 0013 1:57
  */
-@ApiModel(description = "基类查询参数")
+@ApiModel(description = "Base class query parameters")
 @Data
 public class BaseQuery extends BasePageQuery{
-    @ApiModelProperty(value = "用户ID")
+    @ApiModelProperty(value = "User ID")
     private Integer userId;
 }

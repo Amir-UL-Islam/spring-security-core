@@ -1,9 +1,5 @@
 package com.zhengqing.modules.system.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import com.zhengqing.modules.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -11,7 +7,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 /**
  * <p>  System Administration - Log Table </p>
@@ -22,10 +17,9 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description = "System Administration - Log Table")
-@TableName("t_sys_log")
 @Entity
 @Table(name = "t_sys_log")
-public class SysLog extends BaseEntity<SysLog> {
+public class SysLog extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
 
@@ -33,7 +27,7 @@ public class SysLog extends BaseEntity<SysLog> {
      * PrimaryKeyID
      */
     @ApiModelProperty(value = "PrimaryKeyID")
-    @TableId(value = "id", type = IdType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -41,46 +35,40 @@ public class SysLog extends BaseEntity<SysLog> {
      * InterfaceName
      */
     @ApiModelProperty(value = "InterfaceName")
-    @TableField("name")
+    @Column(name = "name")
     private String name;
     /**
      * InterfaceAddress
      */
     @ApiModelProperty(value = "InterfaceAddress")
-    @TableField("url")
+    @Column(name = "url")
     private String url;
     /**
      * VisitorIP
      */
     @ApiModelProperty(value = "VisitorIP")
-    @TableField("ip")
+    @Column(name = "ip")
     private String ip;
     /**
      * VisitorID
      */
     @ApiModelProperty(value = "VisitorID")
-    @TableField("user_id")
+    @Column(name = "user_id")
     private Integer userId;
     /**
      * Status
      */
     @ApiModelProperty(value = "Status")
-    @TableField("status")
+    @Column(name = "status")
     private Integer status;
     /**
      * InterfaceExecutionTime
      */
     @ApiModelProperty(value = "InterfaceExecutionTime")
-    @TableField("execute_time")
+    @Column(name = "execute_time")
     private String executeTime;
 
     @ApiModelProperty(value = "VisitorName")
-    @TableField(exist = false)
+    @Transient
     private String username;
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
-
 }

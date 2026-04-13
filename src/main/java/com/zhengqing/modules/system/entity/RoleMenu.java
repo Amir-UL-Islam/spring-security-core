@@ -1,11 +1,5 @@
 package com.zhengqing.modules.system.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableName;
-import java.io.Serializable;
-
 import com.zhengqing.modules.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -23,7 +17,6 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description = "System Management - Role-Menu Association Table")
-@TableName("t_sys_role_menu")
 @Entity
 @Table(name = "t_sys_role_menu")
 public class RoleMenu extends BaseEntity {
@@ -33,27 +26,22 @@ public class RoleMenu extends BaseEntity {
     /**
      * PrimaryKey
      */
-	@ApiModelProperty(value = "Primary Key")
-	@TableId(value="id", type= IdType.AUTO)
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @ApiModelProperty(value = "Primary Key")
+    @Column(name = "id", nullable = false, updatable = false)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     /**
      * RoleID
      */
-	@ApiModelProperty(value = "Role ID")
-	@TableField("role_id")
-	private Integer roleId;
+    @ApiModelProperty(value = "Role ID")
+    @Column(name = "role_id")
+    private Integer roleId;
     /**
      * MenuID
      */
-	@ApiModelProperty(value = "Menu ID")
-	@TableField("menu_id")
-	private Integer menuId;
-
-	@Override
-	protected Serializable pkVal() {
-		return this.id;
-	}
+    @ApiModelProperty(value = "Menu ID")
+    @Column(name = "menu_id")
+    private Integer menuId;
 
 }

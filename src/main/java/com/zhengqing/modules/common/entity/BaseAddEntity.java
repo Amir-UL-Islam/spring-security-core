@@ -1,17 +1,18 @@
 package com.zhengqing.modules.common.entity;
 
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.enums.FieldFill;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.PrePersist;
 import javax.validation.constraints.Past;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
- *  <p> 创建日期 </p>
+ * <p> Creation date </p>
  *
  * @description:
  * @author: zhengqing
@@ -19,14 +20,20 @@ import java.util.Date;
  */
 @Getter
 @Setter
-public abstract class BaseAddEntity<T extends Model> extends Model<T> {
+@MappedSuperclass
+public abstract class BaseAddEntity implements Serializable {
     /**
-     * 创建日期 - 现在时表示主动创建
+     * Creation date - Present tense indicates active creation
      */
-    @ApiModelProperty(value = "创建日期")
-    @TableField(value = "gmt_create", fill = FieldFill.INSERT)
-    @Past(message = "创建时间必须是过去时间")
+    @ApiModelProperty(value = "Creation date")
+    @Column(name = "gmt_create", nullable = false, updatable = false)
+    @Past(message = "Creation time must be in the past")
     private Date gmtCreate;
+
+    @PrePersist
+    protected void onCreate() {
+        this.gmtCreate = new Date();
+    }
     /**
      * 创建人
      */

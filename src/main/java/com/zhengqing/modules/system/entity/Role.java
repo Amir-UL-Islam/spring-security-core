@@ -1,9 +1,5 @@
 package com.zhengqing.modules.system.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import com.zhengqing.modules.common.entity.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -13,7 +9,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
  * <p>  System Administration-Role Table  </p>
@@ -24,7 +19,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description = "System Administration-Role Table")
-@TableName("t_sys_role")
 @Entity
 @Table(name = "t_sys_role")
 public class Role extends BaseEntity {
@@ -35,7 +29,7 @@ public class Role extends BaseEntity {
      * PrimaryKeyID
      */
     @ApiModelProperty(value = "Primary key ID")
-    @TableId(value = "id", type = IdType.AUTO)
+    @Column(name = "id", nullable = false, updatable = false)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -43,7 +37,7 @@ public class Role extends BaseEntity {
      * RoleCoding
      */
     @ApiModelProperty(value = "Role Coding")
-    @TableField("code")
+    @Column(name = "code")
     @NotBlank(message = "Role code cannot be empty")
     @Length(max = 20, message = "The character code cannot exceed 20 characters")
     private String code;
@@ -51,19 +45,14 @@ public class Role extends BaseEntity {
      * Character name
      */
     @ApiModelProperty(value = "Character name")
-    @TableField("name")
+    @Column(name = "name")
     @NotBlank(message = "Role name cannot be empty")
     private String name;
     /**
      * Role description
      */
     @ApiModelProperty(value = "Role description")
-    @TableField("remarks")
+    @Column(name = "remarks")
     private String remarks;
-
-    @Override
-    protected Serializable pkVal() {
-        return this.id;
-    }
 
 }

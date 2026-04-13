@@ -1,4 +1,4 @@
-# 配置端口
+# Configure ports
 server:
   port: 9101
   servlet:
@@ -10,14 +10,13 @@ spring:
         name: demo
     profiles:
       active: dev
-    # 配置数据源
+    # Configure the data source
     datasource:
-      url: jdbc:mysql://localhost:3307/demo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&useSSL=false # MySQL在高版本需要指明是否进行SSL连接 解决则加上 &useSSL=false
+      url: jdbc:mysql://localhost:3307/demo?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=convertToNull&useSSL=false # In the higher version, MySQL needs to specify whether to use SSL connection, and if it is solved, add &useSSL=false
       name: demo
       username: root
       password: password
-      # 使用druid数据源
-      type: com.alibaba.druid.pool.DruidDataSource
+      # Use the druid data source
       driver-class-name: com.mysql.jdbc.Driver
       filters: stat
       maxActive: 20
@@ -64,14 +63,14 @@ mybatis-plus:
     #自定义SQL注入器
     #sql-injector: com.baomidou.springboot.xxx
   configuration:
-    # 是否开启自动驼峰命名规则映射:从数据库列名到Java属性驼峰命名的类似映射
+    # Whether to enable automatic camel case naming rule mapping: similar mapping from database column names to Java attribute camel case naming
     map-underscore-to-camel-case: true
     cache-enabled: false
-    # 如果查询结果中包含空值的列，则 MyBatis 在映射的时候，不会映射这个字段
+    # If the query result contains a column with a null value, MyBatis will not map this field when mapping.
 #    call-setters-on-nulls: true
-    # 这个配置会将执行的sql打印出来，在开发或测试的时候可以用
+    # This configuration will print out the executed SQL and can be used during development or testing.
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-    # 解决oracle更新数据为null时无法转换报错，mysql不会出现此情况
+    #Solve the problem that Oracle cannot convert the error when the updated data is null. This situation does not occur with MySQL.
     jdbc-type-for-null: 'null'
 
 zhengqing:
@@ -85,15 +84,15 @@ zhengqing:
     contactEmail:
     license:
     licenseUrl:
-  #安全认证
+  #Security certification
   auth:
-    # token过期时间（分钟）
+    #Token expiration time (minutes)
     tokenExpireTime: 60
-    # 用户选择保存登录状态对应token过期时间（天）
+    # The user chooses to save the login status corresponding to the token expiration time (days)
     saveLoginTime: 7
-    # 限制用户登陆错误次数（次）
+    # Limit the number of user login errors (times)
     loginTimeLimit: 10
-    # 错误超过次数后多少分钟后才能继续登录（分钟）
+    # How many minutes will it take to continue logging in after the number of errors exceeds the number (minutes)
     loginAfterTime: 10
     ignoreUrls:
       - /login

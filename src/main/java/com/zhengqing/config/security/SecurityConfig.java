@@ -23,7 +23,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 /**
- *  <p> Security 核心配置类 </p>
+ *  <p> Security Core configuration class </p>
  *
  * @author：  zhengqing <br/>
  * @date：  2019/9/30$ 10:58$ <br/>
@@ -38,36 +38,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final MyProperties myProperties;
 
     /**
-     * 访问鉴权 - 认证token、签名...
+     * Access authentication - authentication token, signature...
      */
     private final MyAuthenticationFilter myAuthenticationFilter;
     /**
-     * 访问权限认证异常处理
+     * Access permission authentication exception handling
      */
     private final AdminAuthenticationEntryPoint adminAuthenticationEntryPoint;
     /**
-     * 用户密码校验过滤器
+     * User password verification filter
      */
     private final AdminAuthenticationProcessingFilter adminAuthenticationProcessingFilter;
 
-    // 上面是登录认证相关  下面为url权限相关 - ========================================================================================
+    // The above is related to login authentication, and the following is related to url permissions. - ========================================================================================
 
     /**
-     * 获取访问url所需要的角色信息
+     * Get the role information required to access the url
      */
     private final UrlFilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource;
     /**
-     * 认证权限处理 - 将上面所获得角色权限与当前登录用户的角色做对比，如果包含其中一个角色即可正常访问
+     * Authentication permission processing
+     * - Compare the role permissions obtained above with the role of the currently logged-in user.
+     * If one of the roles is included, normal access can be achieved
      */
     private final UrlAccessDecisionManager urlAccessDecisionManager;
     /**
-     * 自定义访问无权限接口时403响应内容
+     * Customize the 403 response content when accessing the unauthorized interface
      */
     private final UrlAccessDeniedHandler urlAccessDeniedHandler;
 
 
     /**
-     * 权限配置
+     * Permission configuration
      * @param http
      * @throws Exception
      */
@@ -75,15 +77,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry registry = http.antMatcher("/**").authorizeRequests();
 
-        // 禁用CSRF 开启跨域
+        // Disable CSRF and enable cross-domain
         http.csrf().disable().cors();
 
-        // 未登录认证异常
+        // Not logged in authentication exception
         http.exceptionHandling().authenticationEntryPoint(adminAuthenticationEntryPoint);
-        // 登录过后访问无权限的接口时自定义403响应内容
+
+        // Customize the 403 response content when accessing an unauthorized interface after logging in
         http.exceptionHandling().accessDeniedHandler(urlAccessDeniedHandler);
 
-        // url权限认证处理
+        // URL authority authentication processing
         registry.withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
             @Override
             public <O extends FilterSecurityInterceptor> O postProcess(O o) {
@@ -93,45 +96,54 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             }
         });
 
-        // 不创建会话 - 即通过前端传token到后台过滤器中验证是否存在访问权限
+        // No session is created
+        // - that is, the front-end passes the token to the back-end filter to verify whether access rights exist.
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        // 登录处理 - 前后端一体的情况下
-//        registry.and().formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
-//                // 自定义登陆用户名和密码属性名，默认为 username和password
-//                .usernameParameter("username").passwordParameter("password")
-//                // 异常处理
-//                .failureUrl("/login/error").permitAll()
-//                // 退出登录
-//                .and().logout().permitAll();
+        // Login processing - when the front and back ends are integrated
+        registry.and().formLogin().loginPage("/login").defaultSuccessUrl("/").permitAll()
+//                // Customize the login username and password attribute names, the default is username and password
+                .usernameParameter("username").passwordParameter("password")
+//                // Exception handling
+                .failureUrl("/login/error").permitAll()
+//                // Log out
+                .and().logout().permitAll();
 
-        // 标识访问 `/home` 这个接口，需要具备`ADMIN`角色
-//        registry.antMatchers("/home").hasRole("ADMIN");
-        // 标识只能在 服务器本地ip[127.0.0.1或localhost] 访问 `/home` 这个接口，其他ip地址无法访问
+        //To access the `/home` interface, you need to have the `ADMIN` role.
+        registry.antMatchers("/home").hasRole("ADMIN");
+
+        // The identification can only access the `/home` interface from the server's local IP [127.0.0.1 or localhost], and cannot be accessed from other IP addresses.
         registry.antMatchers("/home").hasIpAddress("127.0.0.1");
 
-        // 允许匿名的url - 可理解为放行接口 - 除配置文件忽略url以外，其它所有请求都需经过认证和授权
+        // Allow anonymous URLs - can be understood as a release interface
+        // - except for configuration files that ignore URLs,
+        // all other requests must be authenticated and authorized
         for (String url : myProperties.getAuth().getIgnoreUrls()) {
             registry.antMatchers(url).permitAll();
         }
 //        registry.antMatchers("/**").access("hasAuthority('admin')");
-        // OPTIONS(选项)：查找适用于一个特定网址资源的通讯选择。 在不需执行具体的涉及数据传输的动作情况下， 允许客户端来确定与资源相关的选项以及 / 或者要求， 或是一个服务器的性能
+        // OPTIONS: Find communication options available for a specific URL resource.
+        // Allows a client to determine resource-related options and/or requirements,
+        // or capabilities of a server, without performing specific actions involving data transfer.
         registry.antMatchers(HttpMethod.OPTIONS, "/**").denyAll();
-        // 自动登录 - cookie储存方式
+
+        // Automatic login - cookie storage method
         registry.and().rememberMe();
-        // 其余所有请求都需要认证
+
+        // All other requests require authentication
         registry.anyRequest().authenticated();
-        // 防止iframe 造成跨域
+
+        // Prevent iframe from causing cross-domain
         registry.and().headers().frameOptions().disable();
 
-        // 自定义过滤器在登录时认证用户名、密码
+        // Custom filters authenticate username and password when logging in
         http.addFilterAt(adminAuthenticationProcessingFilter, UsernamePasswordAuthenticationFilter.class)
             .addFilterBefore(myAuthenticationFilter, BasicAuthenticationFilter.class);
     }
 
     /**
-     * 忽略拦截url或静态资源文件夹 - web.ignoring(): 会直接过滤该url - 将不会经过Spring Security过滤器链
-     *                             http.permitAll(): 不会绕开springsecurity验证，相当于是允许该路径通过
+     * Ignore intercepting URLs or static resource folders - web.ignoring(): will filter the url directly - will not go through the Spring Security filter chain
+     * http.permitAll(): will not bypass spring security verification, which is equivalent to allowing the path to pass
      * @param web
      * @throws Exception
      */

@@ -1,10 +1,9 @@
 package com.zhengqing.modules.system.service;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
-import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.dto.input.MenuQueryPara;
+import com.zhengqing.modules.system.entity.Menu;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -31,7 +30,7 @@ public interface IMenuService {
      * @param filter
      * @return
      */
-    void listPage(Page<Menu> page, MenuQueryPara filter);
+    Page<Menu> listPage(Pageable page, MenuQueryPara filter);
 
     /**
      * Save system management-menu table
@@ -48,7 +47,7 @@ public interface IMenuService {
      */
     List<Menu> list(MenuQueryPara filter);
 
-    List<Menu> selectList(Wrapper<Menu> parentId);
+    List<Menu> findByParentId(Integer parentId);
 
     void deleteById(Integer id);
 

@@ -7,7 +7,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- *  <p> 全局配置解决跨域 </p>
+ *  <p> Global configuration solves cross-domain issues </p>
  *
  * @description :
  * @author : zhengqing
@@ -19,10 +19,12 @@ public class CorsConfig {
     private CorsConfiguration config() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
         corsConfiguration.setAllowCredentials(true);
-        // ① 设置你要允许的网站域名，如果全允许则设为 *
+
+        // ① Set the domain name of the website you want to allow. If all are allowed, set it to *
         corsConfiguration.addAllowedOrigin("*");
         // corsConfiguration.addAllowedOrigin("http://www.zhengqing520.com");
-        // ② 如果要限制 HEADER 或 METHOD 请自行更改
+
+        // ② If you want to restrict HEADER or METHOD, please change it yourself
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         return corsConfiguration;

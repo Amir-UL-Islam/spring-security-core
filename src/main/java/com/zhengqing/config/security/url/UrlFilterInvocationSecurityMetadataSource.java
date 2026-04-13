@@ -1,6 +1,5 @@
 package com.zhengqing.config.security.url;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.zhengqing.config.Constants;
 import com.zhengqing.config.MyProperties;
 import com.zhengqing.modules.system.entity.Menu;
@@ -61,9 +60,9 @@ public class UrlFilterInvocationSecurityMetadataSource implements FilterInvocati
         // All urls in the database
         List<Menu> permissionList = menuRepository.selectList();
         for (Menu permission : permissionList) {
-            // 获取该url所对应的权限
+            // Obtain the permissions corresponding to the URL
             if (("/api" + permission.getUrl()).equals(requestUrl)) {
-                List<RoleMenu> permissions = roleMenuRepository.selectList(new EntityWrapper<RoleMenu>().eq("menu_id", permission.getId()));
+                List<RoleMenu> permissions = roleMenuRepository.findByMenuId(permission.getId());
                 List<String> roles = new LinkedList<>();
                 if (!CollectionUtils.isEmpty(permissions)) {
                     permissions.forEach(e -> {

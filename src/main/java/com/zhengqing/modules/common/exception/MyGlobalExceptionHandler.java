@@ -14,7 +14,7 @@ import javax.validation.ConstraintViolationException;
 import javax.validation.ValidationException;
 
 /**
- *  <p> 全局异常处理器 </p>
+ *  <p> Global exception handler </p>
  *
  * @description: 在spring 3.2中，新增了@ControllerAdvice 注解，可以用于定义@ExceptionHandler、@InitBinder、@ModelAttribute，并应用到所有@RequestMapping中
  * @author: zhengqing
@@ -27,11 +27,11 @@ public class MyGlobalExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(MyGlobalExceptionHandler.class);
 
     /**
-     * 自定义异常处理
+     * Custom exception handling
      */
     @ExceptionHandler(value = MyException.class)
     public ApiResult myException(MyException be) {
-        log.error("自定义异常：", be);
+        log.error("Custom exception：", be);
         if(be.getCode() != null){
             return ApiResult.fail(be.getCode(), be.getMessage());
         }
@@ -46,7 +46,7 @@ public class MyGlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResult handleMethodArgumentNotValidException( MethodArgumentNotValidException e ) {
-        log.error( "方法参数校验:" + e.getMessage(), e );
+        log.error( "Method parameter verification:" + e.getMessage(), e );
         return ApiResult.fail( e.getBindingResult().getFieldError().getDefaultMessage() );
     }
 
@@ -70,12 +70,12 @@ public class MyGlobalExceptionHandler {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ApiResult handlerNoFoundException(Exception e) {
-        return ApiResult.fail( 404, "路径不存在，请检查路径是否正确" );
+        return ApiResult.fail( 404, "The path does not exist, please check whether the path is correct" );
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
     public ApiResult handleDuplicateKeyException(DuplicateKeyException e) {
-        return ApiResult.fail( "数据重复，请检查后提交" );
+        return ApiResult.fail( "The data is duplicated, please check before submitting." );
     }
 
 
@@ -85,44 +85,44 @@ public class MyGlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ApiResult handleRuntimeException(RuntimeException e) {
-        LOG.error("系统异常:", e);
-        return ApiResult.fail("系统异常，操作失败");
+        LOG.error("System exception:", e);
+        return ApiResult.fail("System exception, operation failed");
     }
 
     /**
-     * 空指针异常
+     * Null pointer exception
      */
     @ExceptionHandler(NullPointerException.class)
     public ApiResult nullPointerExceptionHandler(NullPointerException ex) {
-        log.error("空指针异常:", ex);
-        return ApiResult.fail("空指针异常!");
+        log.error("Null pointer exception:", ex);
+        return ApiResult.fail("Null pointer exception!");
     }
 
     /**
-     * 类型转换异常
+     * Type conversion exception
      */
     @ExceptionHandler(ClassCastException.class)
     public ApiResult classCastExceptionHandler(ClassCastException ex) {
-        log.error("类型转换异常:", ex);
-        return ApiResult.fail("类型转换异常!");
+        log.error("Type conversion exception:", ex);
+        return ApiResult.fail("Type conversion exception!");
     }
 
     /**
-     * 数组越界异常
+     * Array out of bounds exception
      */
     @ExceptionHandler(ArrayIndexOutOfBoundsException.class)
     public ApiResult ArrayIndexOutOfBoundsException(ArrayIndexOutOfBoundsException ex) {
-        log.error("数组越界异常:", ex);
-        return ApiResult.fail("数组越界异常!");
+        log.error("Array out of bounds exception:", ex);
+        return ApiResult.fail("Array out of bounds exception!");
     }
 
     /**
-     * 其他错误
+     * Other errors
      */
     @ExceptionHandler({Exception.class})
     public ApiResult exception(Exception ex) {
-        log.error("其他错误:", ex);
-        return ApiResult.fail( 500, "其他错误："+ ex );
+        log.error("Other errors:", ex);
+        return ApiResult.fail( 500, "Other errors："+ ex );
     }
 
 }

@@ -1,16 +1,16 @@
 package com.zhengqing.modules.system.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.dto.input.UserQueryPara;
 import com.zhengqing.modules.system.dto.model.UserInfoVO;
 import com.zhengqing.modules.system.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
 /**
- * <p>  系统管理-用户基础信息表 服务类 </p>
+ * <p>  System Management-User Basic Information Table Service Category </p>
  *
  * @author: zhengqing
  * @date: 2019-08-19
@@ -18,13 +18,13 @@ import java.util.List;
 public interface IUserService {
 
     /**
-     * 系统管理-用户基础信息表列表分页
+     * System Management-User Basic Information Table List Paging
      *
      * @param page
      * @param filter
      * @return
      */
-    void listPage(Page<User> page, UserQueryPara filter);
+    Page<User> listPage(Pageable page, UserQueryPara filter);
 
     /**
      * 保存系统管理-用户基础信息表

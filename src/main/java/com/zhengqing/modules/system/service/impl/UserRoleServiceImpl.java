@@ -1,13 +1,14 @@
 package com.zhengqing.modules.system.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.dto.input.UserRoleQueryPara;
 import com.zhengqing.modules.system.entity.UserRole;
 import com.zhengqing.modules.system.repository.UserRoleRepository;
 import com.zhengqing.modules.system.service.IUserRoleService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,10 +29,8 @@ public class UserRoleServiceImpl implements IUserRoleService {
 
 
     @Override
-    public void listPage(Page<UserRole> page, UserRoleQueryPara filter) {
-        int pageIndex = Math.max(page.getCurrent() - 1, 0);
-        int pageSize = page.getSize();
-        page.setRecords(userRoleRepository.selectUserRoles(PageRequest.of(pageIndex, pageSize), filter));
+    public Page<UserRole> listPage(Pageable pageable, UserRoleQueryPara filter) {
+        return userRoleRepository.selectUserRoles(pageable, filter);
     }
 
     @Override

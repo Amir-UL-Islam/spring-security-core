@@ -2,7 +2,7 @@ package com.zhengqing.modules.common.enumeration;
 
 
 /**
- *  <p> 响应码枚举 - 可参考HTTP状态码的语义 </p>
+ *  <p> Response code enumeration - refer to the semantics of HTTP status codes </p>
  *
  * @description :
  * @author : zhengqing
@@ -14,15 +14,15 @@ public enum ResultCode {
     //失败
     FAILURE( 400, "FAILURE" ),
     // 未登录
-    UN_LOGIN( 401, "未登录" ),
+    UN_LOGIN( 401, "NOT LOGGED IN" ),
     //未认证（签名错误、token错误）
-    UNAUTHORIZED( 403, "未认证或Token失效" ),
+    UNAUTHORIZED( 403, "NOT AUTHENTICATED OR TOKEN INVALID" ),
     //未通过认证
-    USER_UNAUTHORIZED( 402, "用户名或密码不正确" ),
+    USER_UNAUTHORIZED( 402, "INCORRECT USERNAME OR PASSWORD" ),
     //接口不存在
-    NOT_FOUND( 404, "接口不存在" ),
+    NOT_FOUND( 404, "INTERFACE DOES NOT EXIST" ),
     //服务器内部错误
-    INTERNAL_SERVER_ERROR( 500, "服务器内部错误" );
+    INTERNAL_SERVER_ERROR( 500, "SERVER INTERNAL ERROR" );
 
     private int code;
     private String desc;

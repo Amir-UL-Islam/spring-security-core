@@ -1,17 +1,17 @@
 package com.zhengqing.modules.common.entity;
 
-import com.baomidou.mybatisplus.activerecord.Model;
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.enums.FieldFill;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.PreUpdate;
+import java.time.Instant;
 import java.util.Date;
 
 /**
- *  <p> 修改时间 </p>
+ * <p> 修改时间 </p>
  *
  * @description:
  * @author: zhengqing
@@ -20,14 +20,19 @@ import java.util.Date;
 @Getter
 @Setter
 @MappedSuperclass
-public abstract class BaseEntity<T extends Model> extends BaseAddEntity<T> {
+public abstract class BaseEntity extends BaseAddEntity {
     /**
-     * 修改时间 - 过去分词表示被动更新
+     * Modification time - past participle indicates passive update
      */
-    @ApiModelProperty(value = "修改时间")
-    @TableField(value = "gmt_modified", fill = FieldFill.INSERT_UPDATE)
+    @ApiModelProperty(value = "Modification Time")
+    @Column(name = "gmt_modified", nullable = false, updatable = false)
 //    @Future(message = "修改时间必须是将来时间")
     private Date gmtModified;
+
+    @PreUpdate
+    protected void onUpdate() {
+        this.gmtModified = Date.from(Instant.now());
+    }
     /**
      * 修改人
      */

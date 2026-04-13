@@ -1,9 +1,5 @@
 package com.zhengqing.modules.system.entity;
 
-import com.baomidou.mybatisplus.annotations.TableField;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 import com.zhengqing.modules.common.entity.BaseEntity;
 import com.zhengqing.modules.common.validator.FieldRepeatValidator;
 import io.swagger.annotations.ApiModel;
@@ -14,7 +10,6 @@ import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.io.Serializable;
 
 /**
  * <p>  System Management-Permission Menu Table  </p>
@@ -25,7 +20,6 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @ApiModel(description = "System Management-Menu Table")
-@TableName("t_sys_menu")
 @FieldRepeatValidator(field = "resources", message = "Menu coding is repeated!")
 @Entity
 @Table(name = "t_sys_menu")
@@ -36,73 +30,68 @@ public class Menu extends BaseEntity {
     /**
      * PrimaryKey
      */
-	@ApiModelProperty(value = "Primary Key")
-	@TableId(value="id", type= IdType.AUTO)
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @ApiModelProperty(value = "Primary Key")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
     /**
      * ParentMenuID
      */
-	@ApiModelProperty(value = "Previous menu ID")
-	@TableField("parent_id")
-	private String parentId;
-	/**
-	 * url
-	 */
-	@ApiModelProperty(value = "url")
-	@TableField("url")
-	private String url;
+    @ApiModelProperty(value = "Previous menu ID")
+    @Column(name = "parent_id")
+    private String parentId;
+    /**
+     * url
+     */
+    @ApiModelProperty(value = "url")
+    @Column(name = "url")
+    private String url;
     /**
      * Menu encoding
      */
-	@ApiModelProperty(value = "Menu encoding")
-	@TableField("resources")
-	@NotBlank(message = "Menu code cannot be empty")
-	@Length(max = 100, message = "Menu encoding cannot exceed 100 characters")
-	private String resources;
+    @ApiModelProperty(value = "Menu encoding")
+    @Column(name = "resources")
+    @NotBlank(message = "Menu code cannot be empty")
+    @Length(max = 100, message = "Menu encoding cannot exceed 100 characters")
+    private String resources;
     /**
      * Menu name
      */
-	@ApiModelProperty(value = "Menu name")
-	@TableField("title")
-	@NotBlank(message = "Menu name cannot be empty")
-	private String title;
+    @ApiModelProperty(value = "Menu name")
+    @Column(name = "title")
+    @NotBlank(message = "Menu name cannot be empty")
+    private String title;
     /**
      * Menu Level
      */
-	@ApiModelProperty(value = "MenuLevel")
-	@TableField("level")
-	private Integer level;
+    @ApiModelProperty(value = "MenuLevel")
+    @Column(name = "level")
+    private Integer level;
     /**
      * Sort
      */
-	@ApiModelProperty(value = "Sort")
-	@TableField("sort_no")
-	private Integer sortNo;
+    @ApiModelProperty(value = "Sort")
+    @Column(name = "sort_no")
+    private Integer sortNo;
     /**
      * MenuIcon
      */
-	@ApiModelProperty(value = "Menu Icon")
-	@TableField("icon")
-	private String icon;
+    @ApiModelProperty(value = "Menu Icon")
+    @Column(name = "icon")
+    private String icon;
     /**
      * Type menu、button
      */
-	@ApiModelProperty(value = "Type menu、button")
-	@TableField("type")
-	@NotBlank(message = "Type cannot be empty")
-	private String type;
+    @ApiModelProperty(value = "Type menu、button")
+    @Column(name = "type")
+    @NotBlank(message = "Type cannot be empty")
+    private String type;
     /**
      * Remark
      */
-	@ApiModelProperty(value = "Remark")
-	@TableField("remarks")
-	private String remarks;
+    @ApiModelProperty(value = "Remark")
+    @Column(name = "remarks")
+    private String remarks;
 
-	@Override
-	protected Serializable pkVal() {
-		return this.id;
-	}
 
 }

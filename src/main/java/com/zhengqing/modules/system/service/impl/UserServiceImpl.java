@@ -1,7 +1,6 @@
 package com.zhengqing.modules.system.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.config.Constants;
 import com.zhengqing.modules.common.exception.MyException;
 import com.zhengqing.modules.system.dto.input.UserQueryPara;
@@ -11,6 +10,7 @@ import com.zhengqing.modules.system.dto.model.UserInfoVO;
 import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.entity.User;
+import com.zhengqing.modules.system.repository.DefaultRepository;
 import com.zhengqing.modules.system.repository.RoleMenuRepository;
 import com.zhengqing.modules.system.repository.UserRepository;
 import com.zhengqing.modules.system.repository.UserRoleRepository;
@@ -19,6 +19,7 @@ import com.zhengqing.utils.PasswordUtils;
 import com.zhengqing.utils.TreeBuilder;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,10 +44,8 @@ public class UserServiceImpl implements IUserService {
     private final UserRoleRepository userRoleRepository;
 
     @Override
-    public void listPage(Page<User> page, UserQueryPara filter) {
-        int pageIndex = Math.max(page.getCurrent() - 1, 0);
-        int pageSize = page.getSize();
-        page.setRecords(userRepository.selectUsers(PageRequest.of(pageIndex, pageSize), filter));
+    public Page<User> listPage(Pageable page, UserQueryPara filter) {
+        return userRepository.selectUsers(page, filter);
     }
 
     @Override
@@ -96,7 +95,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public org.springframework.data.domain.Page<User> selectUsers(Pageable page, UserQueryPara filter) {
-        return userRepository.findAll(UserRepository.buildSpecification(filter), page);
+        return userRepository.findAll(DefaultRepository.buildSpecification(filter), page);
     }
 
     @Override

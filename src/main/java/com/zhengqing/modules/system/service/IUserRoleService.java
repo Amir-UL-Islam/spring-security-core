@@ -1,8 +1,9 @@
 package com.zhengqing.modules.system.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.dto.input.UserRoleQueryPara;
 import com.zhengqing.modules.system.entity.UserRole;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,7 +22,7 @@ public interface IUserRoleService {
      * @param filter
      * @return
      */
-    void listPage(Page<UserRole> page, UserRoleQueryPara filter);
+    Page<UserRole> listPage(Pageable page, UserRoleQueryPara filter);
 
     /**
      * 保存系统管理 - 用户角色关联表

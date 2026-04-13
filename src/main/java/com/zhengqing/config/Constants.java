@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *  <p> 全局常用变量 </p>
+ *  <p> Global commonly used variables </p>
  *
  * @description :
  * @author : zhengqing
@@ -13,35 +13,35 @@ import java.util.Map;
 public class Constants {
 
     /**
-     * 接口url
+     * InterfaceUrl
      */
     public static Map<String,String> URL_MAPPING_MAP = new HashMap<>();
 
     /**
-     *  获取项目根目录
+     *  Get the project root directory
      */
     public static String PROJECT_ROOT_DIRECTORY = System.getProperty("user.dir");
 
     /**
-     * 密码加密相关
+     * Password encryption related
      */
     public static String SALT = "zhengqing";
     public static final int HASH_ITERATIONS = 1;
 
     /**
-     * 请求头 - token
+     * Request header - token
      */
     public static final String REQUEST_HEADER = "X-Token";
 
     /**
-     * 请求头类型：
-     * application/x-www-form-urlencoded ： form表单格式
+     * Request header type：
+     * application/x-www-form-urlencoded ： FormFormFormat
      * application/json ： json格式
      */
     public static final String REQUEST_HEADERS_CONTENT_TYPE = "application/json";
 
     /**
-     * 登录者角色
+     * Login role
      */
     public static final String ROLE_LOGIN = "role_login";
 

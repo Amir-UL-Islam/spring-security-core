@@ -1,5 +1,8 @@
 package com.zhengqing.modules.common.validator;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
@@ -16,7 +19,11 @@ import javax.validation.ConstraintValidatorContext;
  * @author : zhengqing
  * @date : 2019/9/10 9:22
  */
+@Component
 public class FieldRepeatValidatorClass implements ConstraintValidator<FieldRepeatValidator, Object> {
+
+    @Autowired
+    private FieldRepeatValidatorUtils fieldRepeatValidatorUtils;
 
     private String id;
     private String field;
@@ -31,7 +38,7 @@ public class FieldRepeatValidatorClass implements ConstraintValidator<FieldRepea
 
     @Override
     public boolean isValid(Object o, ConstraintValidatorContext constraintValidatorContext) {
-        return FieldRepeatValidatorUtils.fieldRepeat(id, field, o, message);
+        return fieldRepeatValidatorUtils.fieldRepeat(id, field, o, message);
     }
 
 }

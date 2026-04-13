@@ -4,9 +4,10 @@ import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.dto.input.RoleQueryPara;
 import com.zhengqing.modules.system.repository.RoleRepository;
 import com.zhengqing.modules.system.service.IRoleService;
-import com.baomidou.mybatisplus.plugins.Page;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,8 @@ public class RoleServiceImpl implements IRoleService {
     private final RoleRepository roleRepository;
 
     @Override
-    public void listPage(Page<Role> page, RoleQueryPara filter) {
-        int pageIndex = Math.max(page.getCurrent() - 1, 0);
-        int pageSize = page.getSize();
-        page.setRecords(roleRepository.selectRoles(PageRequest.of(pageIndex, pageSize), filter));
+    public Page<Role> listPage(Pageable page, RoleQueryPara filter) {
+        return roleRepository.selectRoles(page, filter);
     }
 
     @Override

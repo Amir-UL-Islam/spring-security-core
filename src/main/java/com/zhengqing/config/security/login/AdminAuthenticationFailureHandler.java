@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- *  <p> 认证失败处理 - 前后端分离情况下返回json数据格式 </p>
+ *  <p> Authentication failure handling - return json data format when front-end and back-end are separated </p>
  *
  * @description :
  * @author : zhengqing
@@ -31,16 +31,16 @@ public class AdminAuthenticationFailureHandler implements AuthenticationFailureH
         if (e instanceof UsernameNotFoundException || e instanceof BadCredentialsException) {
             result = ApiResult.fail(e.getMessage());
         } else if (e instanceof LockedException) {
-            result = ApiResult.fail("账户被锁定，请联系管理员!");
+            result = ApiResult.fail("The account is locked, please contact the administrator!");
         } else if (e instanceof CredentialsExpiredException) {
-            result = ApiResult.fail("证书过期，请联系管理员!");
+            result = ApiResult.fail("The certificate has expired, please contact the administrator!");
         } else if (e instanceof AccountExpiredException) {
-            result = ApiResult.fail("账户过期，请联系管理员!");
+            result = ApiResult.fail("The account has expired, please contact the administrator!");
         } else if (e instanceof DisabledException) {
-            result = ApiResult.fail("账户被禁用，请联系管理员!");
+            result = ApiResult.fail("Account is disabled, please contact the administrator!");
         } else {
-            log.error("登录失败：", e);
-            result = ApiResult.fail("登录失败!");
+            log.error("Login failed:", e);
+            result = ApiResult.fail("Login failed!");
         }
         ResponseUtils.out(response, result);
     }

@@ -1,6 +1,5 @@
 package com.zhengqing.modules.system.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.common.api.BaseController;
 import com.zhengqing.modules.common.dto.output.ApiResult;
 import com.zhengqing.modules.system.dto.input.RoleMenuQueryPara;
@@ -9,6 +8,9 @@ import com.zhengqing.modules.system.service.IRoleMenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +20,7 @@ import java.util.List;
 
 
 /**
- * <p> 系统管理 - 角色-菜单关联表  接口 </p>
+ * <p> System Administration - Role-Menu Association Table interface </p>
  *
  * @author: zhengqing
  * @description:
@@ -27,18 +29,19 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/system/roleMenu")
-@Api(description = "系统管理 - 角色-菜单关联表 接口")
+@Api(description = "System Administration - Role-Menu Association Table interface")
 public class SysRoleMenuController extends BaseController {
 
     @Autowired
     IRoleMenuService roleMenuService;
 
     @PostMapping(value = "/listPage", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取系统管理 - 角色-菜单关联表 列表分页", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get the System Administration - Roles - Menu Associations Table list pagination", httpMethod = "POST", response = ApiResult.class)
     public ApiResult listPage(@RequestBody RoleMenuQueryPara filter) {
-        Page<RoleMenu> page = new Page<>(filter.getPage(),filter.getLimit());
-        roleMenuService.listPage(page, filter);
-        return ApiResult.ok("获取系统管理 - 角色-菜单关联表 列表分页成功", page);
+
+        Pageable pageable = PageRequest.of(filter.getPage(), filter.getLimit());
+        Page<RoleMenu> page = roleMenuService.listPage(pageable, filter);
+        return ApiResult.ok("Get System Administration - Roles - Menu Associations Table list pagination successfully", page);
     }
 
     @PostMapping(value = "/list", produces = "application/json;charset=utf-8")

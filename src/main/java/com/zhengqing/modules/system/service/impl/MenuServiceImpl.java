@@ -1,17 +1,15 @@
 package com.zhengqing.modules.system.service.impl;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.dto.input.MenuQueryPara;
 import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.repository.MenuRepository;
 import com.zhengqing.modules.system.service.IMenuService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,10 +31,8 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public void listPage(Page<Menu> page, MenuQueryPara filter) {
-        int pageIndex = Math.max(page.getCurrent() - 1, 0);
-        int pageSize = page.getSize();
-        page.setRecords(menuRepository.selectMenus(PageRequest.of(pageIndex, pageSize), filter));
+    public Page<Menu> listPage(Pageable page, MenuQueryPara filter) {
+        return menuRepository.selectMenus(page, filter);
     }
 
     @Override
@@ -45,8 +41,8 @@ public class MenuServiceImpl implements IMenuService {
     }
 
     @Override
-    public List<Menu> selectList(Wrapper<Menu> parentId) {
-        return Collections.emptyList();
+    public List<Menu> findByParentId(Integer parentId) {
+        return menuRepository.findByParentId(String.valueOf(parentId));
     }
 
     @Override
@@ -61,14 +57,7 @@ public class MenuServiceImpl implements IMenuService {
 
     @Override
     public Integer save(Menu para) {
-        if (para.getId() != null) {
-//            menuMapper.updateById(para);
-            menuRepository.save(para);
-        } else {
-//            menuMapper.insert(para);
-            menuRepository.save(para);
-        }
-        return para.getId();
+       return menuRepository.save(para).getId();
     }
 
 }

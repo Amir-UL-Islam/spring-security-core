@@ -28,6 +28,6 @@ public class AdminAuthenticationSuccessHandler implements AuthenticationSuccessH
         User user = new User();
         SecurityUser securityUser = ((SecurityUser) auth.getPrincipal());
         user.setToken(securityUser.getCurrentUserInfo().getToken());
-        ResponseUtils.out(response, ApiResult.ok("登录成功!", user));
+        ResponseUtils.out(response, ApiResult.ok("Login successful!", user));
     }
 }

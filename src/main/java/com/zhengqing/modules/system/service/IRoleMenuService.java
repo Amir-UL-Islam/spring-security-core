@@ -1,8 +1,10 @@
 package com.zhengqing.modules.system.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.entity.RoleMenu;
 import com.zhengqing.modules.system.dto.input.RoleMenuQueryPara;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,11 +19,11 @@ public interface IRoleMenuService {
     /**
      * 系统管理 - 角色-菜单关联表 列表分页
      *
-     * @param page
+     * @param pageRequest
      * @param filter
      * @return
      */
-    void listPage(Page<RoleMenu> page, RoleMenuQueryPara filter);
+    Page<RoleMenu> listPage(Pageable pageRequest, RoleMenuQueryPara filter);
 
     /**
      * 保存系统管理 - 角色-菜单关联表

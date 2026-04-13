@@ -1,9 +1,9 @@
 package com.zhengqing.modules.system.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
-import com.baomidou.mybatisplus.service.IService;
 import com.zhengqing.modules.system.entity.SysLog;
 import com.zhengqing.modules.system.dto.input.LogQueryPara;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -16,13 +16,13 @@ import java.util.List;
 public interface ILogService {
 
     /**
-     * 系统管理 - 日志表列表分页
+     * System Management - Log Table List Paging
      *
      * @param page
      * @param para
      * @return
      */
-    void listPage(Page<SysLog> page, LogQueryPara para);
+    Page<SysLog> listPage(Pageable page, LogQueryPara para);
 
     /**
      * 保存系统管理 - 日志表

@@ -4,34 +4,36 @@ import com.zhengqing.modules.common.dto.input.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 系统管理-用户基础信息表查询参数
+ * System Management - Query parameters in the basic user information table
  *
  * @author: zhengqing
  * @description:
  * @date: 2019-08-19
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理-用户基础信息表查询参数")
+@ApiModel(description = "System Management - Query parameters in the basic user information table")
 public class UserQueryPara extends BasePageQuery{
 
     @ApiModelProperty(value = "id")
     private Integer id;
 
-    @ApiModelProperty(value = "账号")
+    @ApiModelProperty(value = "Username")
     private String username;
 
-    @ApiModelProperty(value = "账号 - 修改个人信息使用")
+    @ApiModelProperty(value = "Account - Modify the use of personal information")
     private String account;
 
-    @ApiModelProperty(value = "密码")
+    @ApiModelProperty(value = "password")
     private String password;
 
-    @ApiModelProperty(value = "QQ第三方登录授权认证成功后的openID")
+    @ApiModelProperty(value = "QQ third-party login authorization after successful authentication")
     private String openId;
 
-    @ApiModelProperty(value = "QQ第三方登录授权认证成功后的token")
+    @ApiModelProperty(value = "QQ third-party login token after successful authorization authentication")
     private String accessToken;
 
 }

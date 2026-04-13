@@ -1,6 +1,5 @@
 package com.zhengqing.modules.system.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.common.api.BaseController;
 import com.zhengqing.modules.common.dto.output.ApiResult;
 import com.zhengqing.modules.system.dto.input.RoleQueryPara;
@@ -9,6 +8,8 @@ import com.zhengqing.modules.system.service.IRoleService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +20,7 @@ import java.util.List;
 
 
 /**
- * <p> 系统管理-角色表  接口 </p>
+ * <p> System Administration - Role Table interface </p>
  *
  * @author: zhengqing
  * @description:
@@ -28,18 +29,18 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/api/system/role")
-@Api(description = "系统管理-角色表 接口")
+@Api(description = "System Administration - Role Table interface")
 public class SysRoleController extends BaseController {
 
     @Autowired
     IRoleService roleService;
 
     @PostMapping(value = "/listPage", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取系统管理-角色表 列表分页", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get the System Administration - Roles Table list pagination", httpMethod = "POST", response = ApiResult.class)
     public ApiResult listPage(@RequestBody RoleQueryPara filter) {
-        Page<Role> page = new Page<>(filter.getPage(),filter.getLimit());
-        roleService.listPage(page, filter);
-        return ApiResult.ok("获取系统管理-角色表 列表分页成功", page);
+        Pageable pageable = PageRequest.of(filter.getPage(), filter.getLimit());
+        roleService.listPage(pageable, filter);
+        return ApiResult.ok("Get System Administration - Role Table The list pagination is successful", pageable);
     }
 
     @PostMapping(value = "/list", produces = "application/json;charset=utf-8")

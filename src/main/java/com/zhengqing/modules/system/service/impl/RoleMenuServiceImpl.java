@@ -1,13 +1,14 @@
 package com.zhengqing.modules.system.service.impl;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.dto.input.RoleMenuQueryPara;
 import com.zhengqing.modules.system.entity.RoleMenu;
 import com.zhengqing.modules.system.repository.RoleMenuRepository;
 import com.zhengqing.modules.system.service.IRoleMenuService;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,10 +28,8 @@ public class RoleMenuServiceImpl implements IRoleMenuService {
     private final RoleMenuRepository roleMenuRepository;
 
     @Override
-    public void listPage(Page<RoleMenu> page, RoleMenuQueryPara filter) {
-        int pageIndex = Math.max(page.getCurrent() - 1, 0);
-        int pageSize = page.getSize();
-        page.setRecords(roleMenuRepository.selectRoleMenus(PageRequest.of(pageIndex, pageSize), filter));
+    public Page<RoleMenu> listPage(Pageable page, RoleMenuQueryPara filter) {
+        return roleMenuRepository.selectRoleMenus(page, filter);
     }
 
     @Override

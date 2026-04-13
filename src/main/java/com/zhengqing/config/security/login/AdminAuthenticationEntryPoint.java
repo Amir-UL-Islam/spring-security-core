@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * <p> 认证权限入口 - 未登录的情况下访问所有接口都会拦截到此 </p>
+ * <p> Authentication authority entry - accessing all interfaces without logging in will intercept this </p>
  *
  * @author : zhengqing
  * @description : 前后端分离情况下返回json格式数据

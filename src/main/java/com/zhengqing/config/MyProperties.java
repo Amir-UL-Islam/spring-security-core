@@ -26,7 +26,7 @@ public class MyProperties {
     private final Auth auth = new Auth();
 
     /**
-     * SWAGGER接口文档参数
+     * SWAGGER interface document parameters
      */
     @Data
     public static class Swagger {
@@ -44,24 +44,23 @@ public class MyProperties {
     @Data
     public static class Auth {
         /**
-         * token过期时间（分钟）
+         * Token expiration time (minutes)
          */
         private Integer tokenExpireTime;
         /**
-         * 用户选择保存登录状态对应TOKEN过期时间（天）
          * The user chooses to save the login status corresponding to the TOKEN expiration time (days)
          */
         private Integer saveLoginTime;
         /**
-         * 限制用户登陆错误次数（次）
+         *Limit the number of user login errors (times)
          */
         private Integer loginTimeLimit;
         /**
-         * 错误超过次数后多少分钟后才能继续登录（分钟）
+         * How many minutes does it take to continue logging in after the number of errors exceeds the number (minutes)
          */
         private Integer loginAfterTime;
         /**
-         * 忽略安全认证的URL
+         * Ignore secure certified URLs
          */
         private List<String> ignoreUrls;
     }

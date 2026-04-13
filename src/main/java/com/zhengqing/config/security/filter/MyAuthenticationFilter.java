@@ -10,12 +10,9 @@ import com.zhengqing.utils.MultiReadHttpServletRequest;
 import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StopWatch;
@@ -27,10 +24,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 /**
- * <p> 访问鉴权 - 每次访问接口都会经过此 </p>
+ * <p> Access authentication - every access to the interface will go through this </p>
  *
  * @author : zhengqing
  * @description :
@@ -40,18 +36,18 @@ import java.util.List;
 @Component
 public class MyAuthenticationFilter extends OncePerRequestFilter {
 
-    @Autowired
-    AdminAuthenticationEntryPoint authenticationEntryPoint;
+    private final AdminAuthenticationEntryPoint authenticationEntryPoint;
 
     private final UserDetailsServiceImpl userDetailsService;
 
-    protected MyAuthenticationFilter(UserDetailsServiceImpl userDetailsService) {
+    protected MyAuthenticationFilter(AdminAuthenticationEntryPoint authenticationEntryPoint, UserDetailsServiceImpl userDetailsService) {
+        this.authenticationEntryPoint = authenticationEntryPoint;
         this.userDetailsService = userDetailsService;
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        System.out.println("请求头类型： " + request.getContentType());
+        System.out.println("Request header type： " + request.getContentType());
         if ((request.getContentType() == null && request.getContentLength() > 0) || (request.getContentType() != null && !request.getContentType().contains(Constants.REQUEST_HEADERS_CONTENT_TYPE))) {
             filterChain.doFilter(request, response);
             return;
@@ -74,20 +70,20 @@ public class MyAuthenticationFilter extends OncePerRequestFilter {
 
             // 前后端分离情况下，前端登录后将token储存在cookie中，每次访问接口时通过token去拿用户权限
             String jwtToken = wrappedRequest.getHeader(Constants.REQUEST_HEADER);
-            log.debug("后台检查令牌:{}", jwtToken);
+            log.debug("Check the token in the background:{}", jwtToken);
             if (StringUtils.isNotBlank(jwtToken)) {
                 // JWT相关start ===========================================
                 // 获取jwt中的信息
                 Claims claims = Jwts.parser().setSigningKey(Constants.SALT).parseClaimsJws(jwtToken.replace("Bearer", "")).getBody();
                 // 获取当前登录用户名
-                System.out.println("获取当前登录用户名: " + claims.getSubject());
-                // TODO 如需使用jwt特性在此做处理~
+                System.out.println("Get the current login username: " + claims.getSubject());
+                // TODO If you need to use the JWT feature to deal with it here~
                 // JWT相关end ===========================================
 
                 // 检查token
                 SecurityUser securityUser = userDetailsService.getUserByToken(jwtToken);
                 if (securityUser == null || securityUser.getCurrentUserInfo() == null) {
-                    throw new BadCredentialsException("TOKEN已过期，请重新登录！");
+                    throw new BadCredentialsException("The TOKEN has expired, please log in again！");
                 }
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(securityUser, null, securityUser.getAuthorities());
                 // 全局注入角色权限信息和登录用户基本信息
@@ -116,9 +112,9 @@ public class MyAuthenticationFilter extends OncePerRequestFilter {
             try {
                 String bodyJson = wrapper.getBodyJsonStrByJson(request);
                 String url = wrapper.getRequestURI().replace("//", "/");
-                System.out.println("-------------------------------- 请求url: " + url + " --------------------------------");
+                System.out.println("-------------------------------- Request URL: " + url + " --------------------------------");
                 Constants.URL_MAPPING_MAP.put(url, url);
-                log.info("`{}` 接收到的参数: {}", url, bodyJson);
+                log.info("`{}` Received parameters: {}", url, bodyJson);
                 return bodyJson;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -138,7 +134,7 @@ public class MyAuthenticationFilter extends OncePerRequestFilter {
                 } catch (UnsupportedEncodingException ex) {
                     payload = "[unknown]";
                 }
-                log.info("`{}`  耗时:{}ms  返回的参数: {}", Constants.URL_MAPPING_MAP.get(request.getRequestURI()), useTime, payload);
+                log.info("'{}' time-consuming: {}ms returned parameter: {}", Constants.URL_MAPPING_MAP.get(request.getRequestURI()), useTime, payload);
             }
         }
     }

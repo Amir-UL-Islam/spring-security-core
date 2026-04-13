@@ -5,34 +5,34 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 /**
- *  <p> API返回参数 </p>
+ *  <p> API return parameters </p>
  *
  * @description :
  * @author : zhengqing
  * @date : 2019/7/20 11:09
  */
-@ApiModel(value = "API返回参数")
+@ApiModel(value = "API return parameters")
 public class ApiResult {
     /**
-     * 消息内容
+     * Message content
      */
-    @ApiModelProperty(value = "响应消息", required = false)
+    @ApiModelProperty(value = "Response Message", required = false)
     private String message;
 
     /**
-     * 响应码：参考`ResultCode`
+     * Response code: refer to `ResultCode`
      */
-    @ApiModelProperty(value = "响应码", required = true)
+    @ApiModelProperty(value = "Response Code", required = true)
     private Integer code;
 
     /**
-     * 响应中的数据
+     * Data In Response
      */
-    @ApiModelProperty(value = "响应数据", required = false)
+    @ApiModelProperty(value = "Response Data", required = false)
     private Object data;
 
     /***
-     * 过期
+     * Expired
      *
      * @param message:
      * @return: com.zhengqing.modules.common.dto.output.ApiResult
@@ -73,7 +73,7 @@ public class ApiResult {
     }
 
     /**
-     * 自定义返回码
+     * Custom return code
      */
     public static ApiResult ok(Integer code, String message) {
         return new ApiResult(code, message);
@@ -82,9 +82,9 @@ public class ApiResult {
     /**
      * 自定义
      *
-     * @param code：验证码
-     * @param message：返回消息内容
-     * @param data：返回数据
+     * @param code：Verification code
+     * @param message：Return message content
+     * @param data：Return data
      * @return: com.zhengqing.modules.common.dto.output.ApiResult
      */
     public static ApiResult ok(Integer code, String message, Object data) {

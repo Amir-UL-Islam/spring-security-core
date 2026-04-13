@@ -4,21 +4,23 @@ import com.zhengqing.modules.common.dto.input.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 系统管理 - 角色-菜单关联表 查询参数
+ * System Administration - Roles - Menu Associate Table Query parameters
  *
  * @author: zhengqing
  * @description:
  * @date: 2019-08-20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理 - 角色-菜单关联表 查询参数")
+@ApiModel(description = "System Administration - Roles - Menu Associate Table Query parameters")
 public class RoleMenuQueryPara extends BasePageQuery{
     @ApiModelProperty(value = "id")
     private Integer id;
-    @ApiModelProperty(value = "角色ID")
+    @ApiModelProperty(value = "Role ID")
     private Integer roleId;
-    @ApiModelProperty(value = "菜单ids")
+    @ApiModelProperty(value = "Menu ids")
     private String menuIds;
 }

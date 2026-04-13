@@ -1,14 +1,14 @@
 package com.zhengqing.modules.system.api;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.common.api.BaseController;
 import com.zhengqing.modules.common.dto.output.ApiResult;
 import com.zhengqing.modules.system.dto.input.LogQueryPara;
-import com.zhengqing.modules.system.entity.SysLog;
 import com.zhengqing.modules.system.service.ILogService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 /**
- * <p> 系统管理 - 日志表 接口 </p>
+ * <p> System Management - Log Table Interface </p>
  *
  * @author: zhengqing
  * @description:
@@ -25,18 +25,18 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/api/system/log")
-@Api(description = "系统管理 - 日志表接口")
+@Api(description = "System Management - Log Table Interface")
+@RequiredArgsConstructor
 public class SysLogController extends BaseController {
 
-    @Autowired
-    ILogService logService;
+    private final ILogService logService;
 
     @PostMapping(value = "/listPage", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取系统管理 - 日志表列表分页", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get system management - log table list paging", httpMethod = "POST", response = ApiResult.class)
     public ApiResult listPage(@RequestBody LogQueryPara filter) {
-        Page<SysLog> page = new Page<>(filter.getPage(),filter.getLimit());
-        logService.listPage(page, filter);
-        return ApiResult.ok("获取系统管理 - 日志表列表分页成功", page);
+        Pageable pageable = PageRequest.of(filter.getPage(), filter.getLimit());
+        logService.listPage(pageable, filter);
+        return ApiResult.ok("Get system management - log table list pagination successful", pageable);
     }
 
 //    @PostMapping(value = "/list", produces = "application/json;charset=utf-8")

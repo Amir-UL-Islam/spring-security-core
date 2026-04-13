@@ -4,9 +4,9 @@ import com.zhengqing.modules.system.entity.SysLog;
 import com.zhengqing.modules.system.dto.input.LogQueryPara;
 import com.zhengqing.modules.system.repository.LogRepository;
 import com.zhengqing.modules.system.service.ILogService;
-import com.baomidou.mybatisplus.plugins.Page;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,16 +26,14 @@ public class LogServiceImpl implements ILogService {
     private final LogRepository logRepository;
 
     @Override
-    public void listPage(Page<SysLog> page, LogQueryPara para) {
-        int pageIndex = Math.max(page.getCurrent() - 1, 0);
-        int pageSize = page.getSize();
-        List<SysLog> result = logRepository.selectLogs(PageRequest.of(pageIndex, pageSize), para);
+    public Page<SysLog> listPage(Pageable page, LogQueryPara para) {
+        Page<SysLog> result = logRepository.selectLogs(page, para);
         result.forEach(e -> {
             if (e.getUserId() == 0) {
                 e.setUsername("非法人员");
             }
         });
-        page.setRecords(result);
+        return result;
     }
 
     @Override

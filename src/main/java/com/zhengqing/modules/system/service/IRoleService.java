@@ -1,8 +1,9 @@
 package com.zhengqing.modules.system.service;
 
-import com.baomidou.mybatisplus.plugins.Page;
 import com.zhengqing.modules.system.entity.Role;
 import com.zhengqing.modules.system.dto.input.RoleQueryPara;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -17,11 +18,11 @@ public interface IRoleService {
     /**
      * 系统管理-角色表 列表分页
      *
-     * @param page
+     * @param pageable
      * @param filter
      * @return
      */
-    void listPage(Page<Role> page, RoleQueryPara filter);
+    Page<Role> listPage(Pageable pageable, RoleQueryPara filter);
 
     /**
      * 保存系统管理-角色表

@@ -4,19 +4,21 @@ import com.zhengqing.modules.common.dto.input.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 系统管理-角色表 查询参数
+ * System Administration - Role Table Query parameters
  *
  * @author: zhengqing
  * @description:
  * @date: 2019-08-20
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理-角色表 查询参数")
+@ApiModel(description = "System Administration - Role Table Query parameters")
 public class RoleQueryPara extends BasePageQuery{
-    @ApiModelProperty(value = "角色id")
+    @ApiModelProperty(value = "Role ID")
     private Integer id;
-    @ApiModelProperty(value = "角色名称")
+    @ApiModelProperty(value = "Character name")
     private String name;
 }

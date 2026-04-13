@@ -1,16 +1,18 @@
 package com.zhengqing.modules.system.repository;
 
-import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.zhengqing.modules.system.dto.input.RoleMenuQueryPara;
 import com.zhengqing.modules.system.entity.Menu;
 import com.zhengqing.modules.system.entity.RoleMenu;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 
-public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
+public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long>, DefaultRepository<RoleMenu> {
 
 
     /**
@@ -20,7 +22,9 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
      * @param filter
      * @return
      */
-    List<RoleMenu> selectRoleMenus(Pageable page, @Param("filter") RoleMenuQueryPara filter);
+    default Page<RoleMenu> selectRoleMenus(Pageable page, RoleMenuQueryPara filter) {
+        return findAll(DefaultRepository.buildSpecification(filter), page);
+    }
 
     /**
      * List
@@ -28,7 +32,9 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
      * @param filter
      * @return
      */
-    List<RoleMenu> selectRoleMenus(@Param("filter") RoleMenuQueryPara filter);
+    default List<RoleMenu> selectRoleMenus(@Param("filter") RoleMenuQueryPara filter) {
+        return findAll(DefaultRepository.buildSpecification(filter));
+    }
 
     /**
      * Delete user and menu related data based on role ID
@@ -36,6 +42,8 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
      * @param roleId:
      * @return: void
      */
+    @Modifying
+    @Query("DELETE FROM RoleMenu rm WHERE rm.roleId = :roleId")
     void deleteByRoleId(@Param("roleId") Integer roleId);
 
 
@@ -45,7 +53,9 @@ public interface RoleMenuRepository extends JpaRepository<RoleMenu, Long> {
      * @param roleId:
      * @return: java.util.List<com.zhengqing.modules.system.entity.Menu>
      */
+    @Query("SELECT m FROM Menu m JOIN RoleMenu rm ON m.id = rm.menuId WHERE rm.roleId = :roleId")
     List<Menu> selectMenusByRoleId(@Param("roleId") Integer roleId);
 
-    List<RoleMenu> selectList(Wrapper<RoleMenu> menuId);
+    @Query("SELECT rm FROM RoleMenu rm WHERE rm.menuId = :menuId")
+    List<RoleMenu> findByMenuId(Integer menuId);
 }

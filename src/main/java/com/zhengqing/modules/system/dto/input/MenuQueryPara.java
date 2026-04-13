@@ -4,16 +4,18 @@ import com.zhengqing.modules.common.dto.input.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * 系统管理-菜单表 查询参数
+ * System Administration - Menu Table Query parameters
  *
  * @author: zhengqing
  * @description:
  * @date: 2019-08-19
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理-菜单表 查询参数")
+@ApiModel(description = "System Administration - Menu Table Query parameters")
 public class MenuQueryPara extends BasePageQuery{
     @ApiModelProperty(value = "id")
     private Integer id;

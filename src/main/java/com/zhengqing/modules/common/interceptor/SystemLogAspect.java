@@ -4,6 +4,7 @@ import com.zhengqing.config.Constants;
 import com.zhengqing.modules.common.dto.output.ApiResult;
 import com.zhengqing.modules.system.entity.SysLog;
 import com.zhengqing.modules.system.repository.UserRepository;
+import com.zhengqing.modules.system.service.ILogService;
 import com.zhengqing.utils.DateTimeUtils;
 import com.zhengqing.utils.IpUtils;
 import io.swagger.annotations.ApiOperation;
@@ -37,6 +38,7 @@ import java.util.Date;
 public class SystemLogAspect {
 
     private final UserRepository userRepository;
+    private final ILogService logService;
 
     @Pointcut("execution(* com.zhengqing.modules.*.api.*Controller.*(..)))")
     public void systemLog() {
@@ -48,14 +50,15 @@ public class SystemLogAspect {
         HttpServletRequest request = attributes.getRequest();
         HttpServletResponse response = attributes.getResponse();
 
-        // 拿到ip地址、请求路径、token
+        // Get the ip address, request path, token
         String url = request.getRequestURL().toString();
         String ip = IpUtils.getIpAdrress(request);
         String token = request.getHeader(Constants.REQUEST_HEADER);
 
-        // 从切面织入点处通过反射机制获取织入点处的方法
+        // Method to obtain the weaving point from the weaving point of the cut surface through the reflection mechanism
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
-        // 获取切入点所在的方法
+
+        // How to get the entry point
         Method method = signature.getMethod();
         ApiOperation apiOperation = method.getAnnotation(ApiOperation.class);
         String methodName = "";
@@ -87,7 +90,7 @@ public class SystemLogAspect {
         }
         sysLog.setStatus(result.getCode());
         sysLog.setExecuteTime(totalTime + " ms");
-        sysLog.insert();
+        logService.save(sysLog);
         return result;
     }
 

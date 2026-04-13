@@ -4,13 +4,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- *  <p> 应用基础传入参数 </p>
+ *  <p> Apply basic incoming parameters </p>
  *
  * @description:
  * @author: zhengqing
  * @date: 2019/9/13 0013 1:57
  */
-@ApiModel(description = "应用基础传入参数")
+@ApiModel(description = "Apply basic incoming parameters")
 @Data
 public class BaseInput {
 //    @ApiModelProperty(value = "令牌")

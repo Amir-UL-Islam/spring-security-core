@@ -2,8 +2,6 @@ package com.zhengqing.modules.system.api;
 
 import cn.hutool.core.bean.BeanUtil;
 import com.alibaba.fastjson.JSONObject;
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.baomidou.mybatisplus.plugins.Page;
 import com.google.common.collect.Lists;
 import com.zhengqing.modules.common.api.BaseController;
 import com.zhengqing.modules.common.dto.output.ApiResult;
@@ -14,7 +12,9 @@ import com.zhengqing.modules.system.service.IMenuService;
 import com.zhengqing.utils.TreeBuilder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 /**
- * <p> 系统管理-菜单表  接口 </p>
+ * <p> System Management-Menu Table Interface </p>
  *
  * @author: zhengqing
  * @description:
@@ -37,75 +37,75 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("/api/system/menu")
-@Api(description = "系统管理 - 菜单表 接口")
+@Api(description = "System Management - Menu Table Interface")
+@RequiredArgsConstructor
 public class SysMenuController extends BaseController {
 
-    @Autowired
-    IMenuService menuService;
+    private final IMenuService menuService;
 
     @PostMapping(value = "/treeMenu", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取菜单树", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get menu tree", httpMethod = "POST", response = ApiResult.class)
     public ApiResult treeMenu() {
         List<Menu> list = menuService.listTreeMenu();
         List<MenuTreeNode> menuTreeNodeList = Lists.newArrayList();
-        if( list != null && !list.isEmpty() ){
-            list.forEach( temp->{
+        if (list != null && !list.isEmpty()) {
+            list.forEach(temp -> {
                 MenuTreeNode menuTreeNode = new MenuTreeNode();
-                BeanUtil.copyProperties( temp, menuTreeNode);
-                menuTreeNodeList.add( menuTreeNode );
-            } );
+                BeanUtil.copyProperties(temp, menuTreeNode);
+                menuTreeNodeList.add(menuTreeNode);
+            });
         }
-        List<MenuTreeNode> menuTreeNodeList2 = TreeBuilder.buildMenuTree( menuTreeNodeList );
+        List<MenuTreeNode> menuTreeNodeList2 = TreeBuilder.buildMenuTree(menuTreeNodeList);
 
-        menuTreeNodeList2.stream().sorted( Comparator.comparing( MenuTreeNode::getSortNo ) ).collect( Collectors.toList());
+        menuTreeNodeList2.stream().sorted(Comparator.comparing(MenuTreeNode::getSortNo)).collect(Collectors.toList());
         JSONObject json = new JSONObject();
-        json.put( "menuList", list);
-        json.put( "menuTree", menuTreeNodeList2);
-        return ApiResult.ok("获取菜单树成功", json);
+        json.put("menuList", list);
+        json.put("menuTree", menuTreeNodeList2);
+        return ApiResult.ok("Get menu tree successfully", json);
     }
 
     @PostMapping(value = "/save", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "保存菜单 ", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Save Menu ", httpMethod = "POST", response = ApiResult.class)
     public ApiResult save(@RequestBody @Validated Menu input) {
         Integer id = menuService.save(input);
-        return ApiResult.ok("保存菜单成功", id);
+        return ApiResult.ok("Save menu successfully", id);
     }
 
     @PostMapping(value = "/delete", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "删除菜单", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Delete Menu", httpMethod = "POST", response = ApiResult.class)
     public ApiResult delete(@RequestBody MenuQueryPara input) {
-        // 如果该菜单下存在子菜单，提示先删除子菜单
-        List<Menu> menuList = menuService.selectList(new EntityWrapper<Menu>().eq("parent_id", input.getId()));
-        if (!CollectionUtils.isEmpty(menuList)){
+        // If there is a submenu under this menu, you are prompted to delete the submenu first.
+        List<Menu> menuList = menuService.findByParentId(input.getId());
+        if (!CollectionUtils.isEmpty(menuList)) {
 //            menuList.forEach(e -> menuService.deleteById(e.getId()));
-            return ApiResult.fail("该菜单下存在子菜单，请先删除子菜单！");
+            return ApiResult.fail("There is a submenu under this menu, please delete the submenu first!");
         }
         menuService.deleteById(input.getId());
-        return ApiResult.ok("删除菜单成功");
+        return ApiResult.ok("Delete menu successfully");
     }
 
-    // 下面暂时不用 ================================================
+    // Not used below for now ================================================
 
     @PostMapping(value = "/listPage", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取系统管理-菜单表 列表分页", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get system management-menu table list paging", httpMethod = "POST", response = ApiResult.class)
     public ApiResult listPage(@RequestBody MenuQueryPara filter) {
-        Page<Menu> page = new Page<>(filter.getPage(),filter.getLimit());
-        menuService.listPage(page, filter);
-        return ApiResult.ok("获取系统管理-菜单表 列表分页成功", page);
+        Pageable pageable = PageRequest.of(filter.getPage(), filter.getLimit());
+        menuService.listPage(pageable, filter);
+        return ApiResult.ok("Obtain system management-menu table list paging successfully", pageable);
     }
 
     @PostMapping(value = "/list", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取系统管理-菜单表 列表", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get system management-menu table list", httpMethod = "POST", response = ApiResult.class)
     public ApiResult list(@RequestBody MenuQueryPara filter) {
         List<Menu> result = menuService.list(filter);
-        return ApiResult.ok("获取系统管理-菜单表 列表成功",result);
+        return ApiResult.ok("Obtain system management-menu table list successfully", result);
     }
 
     @PostMapping(value = "/getById", produces = "application/json;charset=utf-8")
-    @ApiOperation(value = "获取系统管理-菜单表 信息", httpMethod = "POST", response = ApiResult.class)
+    @ApiOperation(value = "Get system management-menu table information", httpMethod = "POST", response = ApiResult.class)
     public ApiResult getById(@RequestBody MenuQueryPara input) {
         Menu entity = menuService.selectById(input.getId());
-        return ApiResult.ok("获取系统管理-菜单表 信息成功", entity);
+        return ApiResult.ok("Obtained system management-menu table information successfully", entity);
     }
 
 }

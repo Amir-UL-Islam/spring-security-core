@@ -31,12 +31,11 @@ public class ApplicationTests {
      * @return: void
      */
     @Test
-    public void test() throws Exception {
-        List<User> users = userRepository.selectList(null);
+    public void test()  {
+        List<User> users = userRepository.findAll();
         users.forEach(e -> {
             e.setPassword(PasswordUtils.encodePassword(e.getPassword(), Constants.SALT));
             e.setSalt(Constants.SALT);
-//            userMapper.updateById(e);
             userRepository.save(e);
         });
     }

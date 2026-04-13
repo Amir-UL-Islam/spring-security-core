@@ -4,27 +4,29 @@ import com.zhengqing.modules.common.dto.input.BasePageQuery;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
 /**
- * 系统管理 - 日志表查询参数
+ * System Administration - Log table query parameters
  *
  * @author: zhengqing
  * @description:
  * @date: 2019-09-18 10:51:57
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-@ApiModel(description = "系统管理 - 日志表查询参数")
+@ApiModel(description = "System Administration - Log table query parameters")
 public class LogQueryPara extends BasePageQuery{
     @ApiModelProperty(value = "id")
     private Integer id;
-    @ApiModelProperty(value = "访问人")
+    @ApiModelProperty(value = "Interviewer")
     private String username;
-    @ApiModelProperty(value = "访问url")
+    @ApiModelProperty(value = "Visit URL")
     private String url;
-    @ApiModelProperty(value = "访问开始时间")
+    @ApiModelProperty(value = "Access start time")
     private Date startTime;
-    @ApiModelProperty(value = "访问结束时间")
+    @ApiModelProperty(value = "End of visit")
     private Date endTime;
 }

@@ -3,6 +3,7 @@ package com.zhengqing.modules.system.dto.output;
 import com.google.common.collect.Lists;
 import com.zhengqing.modules.system.entity.Menu;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * @author : zhengqing
  * @date : 2019/8/19 18:54
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
 public class MenuTreeNode extends Menu {
 

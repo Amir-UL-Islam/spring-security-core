@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collection;
 
 /**
- * <p> 对访问url进行权限认证处理 </p>
+ * <p> Perform permission authentication processing on access URLs </p>
  *
  * @author : zhengqing
  * @description :
@@ -24,8 +24,8 @@ import java.util.Collection;
 public class UrlAccessDecisionManager implements AccessDecisionManager {
 
     /**
-     * @param authentication: 当前登录用户的角色信息
-     * @param object: 请求url信息
+     * @param authentication: Role information of the currently logged in user
+     * @param object: Request url information
      * @param collection: `UrlFilterInvocationSecurityMetadataSource`中的getAttributes方法传来的，表示当前请求需要的角色（可能有多个）
      * @return: void
      */
@@ -33,7 +33,7 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
     public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> collection) throws AccessDeniedException, AuthenticationException {
         // 遍历角色
         for (ConfigAttribute ca : collection) {
-            // ① 当前url请求需要的权限
+            //① Permissions required by the current url request
             String needRole = ca.getAttribute();
             if (Constants.ROLE_LOGIN.equals(needRole)) {
                 if (authentication instanceof AnonymousAuthenticationToken) {
@@ -43,16 +43,16 @@ public class UrlAccessDecisionManager implements AccessDecisionManager {
                 }
             }
 
-            // ② 当前用户所具有的角色
+            //② The role of the current user
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
             for (GrantedAuthority authority : authorities) {
-                // 只要包含其中一个角色即可访问
+                // Just include one of these roles to access
                 if (authority.getAuthority().equals(needRole)) {
                     return;
                 }
             }
         }
-        throw new AccessDeniedException("请联系管理员分配权限！");
+        throw new AccessDeniedException("Please contact the administrator to assign permissions!");
     }
 
     @Override
